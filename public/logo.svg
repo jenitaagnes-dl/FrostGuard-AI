@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="shieldGrad" x1="20" y1="10" x2="100" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#0369A1"/>
+    </linearGradient>
+    <linearGradient id="iceGrad" x1="40" y1="30" x2="80" y2="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E0F2FE"/>
+      <stop offset="100%" stop-color="#BAE6FD"/>
+    </linearGradient>
+  </defs>
+  <path d="M60 12L24 28V62C24 85 39 104 60 110C81 104 96 85 96 62V28L60 12Z" fill="url(#shieldGrad)"/>
+  <path d="M60 20L30 33V62C30 81 43 97 60 102C77 97 90 81 90 62V33L60 20Z" fill="#0C4A6E" opacity="0.25"/>
+  <!-- Snowflake & Thermometer Fusion -->
+  <line x1="60" y1="38" x2="60" y2="82" stroke="url(#iceGrad)" stroke-width="4" stroke-linecap="round"/>
+  <line x1="38" y1="60" x2="82" y2="60" stroke="url(#iceGrad)" stroke-width="4" stroke-linecap="round"/>
+  <line x1="44" y1="44" x2="76" y2="76" stroke="url(#iceGrad)" stroke-width="3" stroke-linecap="round"/>
+  <line x1="76" y1="44" x2="44" y2="76" stroke="url(#iceGrad)" stroke-width="3" stroke-linecap="round"/>
+  <!-- Center Core -->
+  <circle cx="60" cy="60" r="7" fill="#38BDF8"/>
+  <circle cx="60" cy="60" r="3" fill="#FFFFFF"/>
+</svg>

@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FrostGuard AI - Live Monitoring MVP</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Inter & JetBrains Mono Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Play CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim as instructed -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary": "#ffffff",
+            "surface-variant": "#d3e4fe",
+            "surface-container-highest": "#d3e4fe",
+            "on-tertiary-fixed-variant": "#005236",
+            "on-secondary-fixed": "#131b2e",
+            "primary": "#006194",
+            "surface-dim": "#cbdbf5",
+            "surface-container": "#e5eeff",
+            "on-tertiary-fixed": "#002113",
+            "inverse-surface": "#213145",
+            "error-container": "#ffdad6",
+            "surface-bright": "#f8f9ff",
+            "surface-container-high": "#dce9ff",
+            "on-primary-container": "#fdfcff",
+            "primary-fixed": "#cce5ff",
+            "outline": "#707881",
+            "on-error-container": "#93000a",
+            "on-background": "#0b1c30",
+            "secondary-fixed-dim": "#bec6e0",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#4edea3",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container-low": "#eff4ff",
+            "primary-fixed-dim": "#93ccff",
+            "secondary-container": "#dae2fd",
+            "outline-variant": "#bfc7d2",
+            "tertiary-container": "#00855b",
+            "inverse-primary": "#93ccff",
+            "secondary-fixed": "#dae2fd",
+            "tertiary": "#006947",
+            "on-primary": "#ffffff",
+            "background": "#f8f9ff",
+            "on-primary-fixed-variant": "#004b73",
+            "on-secondary-container": "#5c647a",
+            "on-surface-variant": "#3f4850",
+            "on-secondary-fixed-variant": "#3f465c",
+            "surface-tint": "#006398",
+            "on-surface": "#0b1c30",
+            "on-error": "#ffffff",
+            "secondary": "#565e74",
+            "on-primary-fixed": "#001d31",
+            "error": "#ba1a1a",
+            "surface": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-fixed": "#6ffbbe",
+            "primary-container": "#007bb9",
+            "on-tertiary-container": "#f5fff6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2rem",
+            "margin": "2rem",
+            "gutter-mobile": "0.75rem",
+            "space-md": "1rem",
+            "space-2xl": "3rem",
+            "space-lg": "1.5rem",
+            "gutter": "1.5rem",
+            "space-sm": "0.5rem",
+            "margin-mobile": "1rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "telemetry-metric": [
+              "JetBrains Mono"
+            ],
+            "headline-lg-mobile": [
+              "Inter"
+            ],
+            "label-sm": [
+              "JetBrains Mono"
+            ],
+            "body-sm": [
+              "Inter"
+            ],
+            "body-lg": [
+              "Inter"
+            ],
+            "headline-lg": [
+              "Inter"
+            ],
+            "label-lg": [
+              "JetBrains Mono"
+            ],
+            "body-md": [
+              "Inter"
+            ],
+            "headline-sm": [
+              "Inter"
+            ],
+            "headline-md": [
+              "Inter"
+            ],
+            "display-lg": [
+              "Inter"
+            ],
+            "label-md": [
+              "JetBrains Mono"
+            ]
+          },
+          "fontSize": {
+            "telemetry-metric": [
+              "32px",
+              {
+                "lineHeight": "36px",
+                "letterSpacing": "-0.03em",
+                "fontWeight": "700"
+              }
+            ],
+            "headline-lg-mobile": [
+              "24px",
+              {
+                "lineHeight": "32px",
+                "letterSpacing": "-0.015em",
+                "fontWeight": "600"
+              }
+            ],
+            "label-sm": [
+              "11px",
+              {
+                "lineHeight": "14px",
+                "letterSpacing": "0.02em",
+                "fontWeight": "500"
+              }
+            ],
+            "body-sm": [
+              "12px",
+              {
+                "lineHeight": "16px",
+                "fontWeight": "400"
+              }
+            ],
+            "body-lg": [
+              "16px",
+              {
+                "lineHeight": "24px",
+                "fontWeight": "400"
+              }
+            ],
+            "headline-lg": [
+              "28px",
+              {
+                "lineHeight": "36px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "600"
+              }
+            ],
+            "label-lg": [
+              "14px",
+              {
+                "lineHeight": "20px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "500"
+              }
+            ],
+            "body-md": [
+              "14px",
+              {
+                "lineHeight": "20px",
+                "fontWeight": "400"
+              }
+            ],
+            "headline-sm": [
+              "16px",
+              {
+                "lineHeight": "24px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-md": [
+              "20px",
+              {
+                "lineHeight": "28px",
+                "letterSpacing": "-0.015em",
+                "fontWeight": "600"
+              }
+            ],
+            "display-lg": [
+              "36px",
+              {
+                "lineHeight": "44px",
+                "letterSpacing": "-0.025em",
+                "fontWeight": "700"
+              }
+            ],
+            "label-md": [
+              "12px",
+              {
+                "lineHeight": "16px",
+                "letterSpacing": "0em",
+                "fontWeight": "500"
+              }
+            ]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-body-md text-body-md select-none">
+<!-- ==================== SHARED COMPONENT: SideNavBar ==================== -->
+<aside class="fixed top-0 left-0 h-full w-72 flex flex-col justify-between p-4 z-40 bg-surface-container-lowest border-r border-outline-variant shadow-sm">
+<div class="flex flex-col gap-6">
+<!-- SideNav Header -->
+<div class="flex items-center gap-3 px-2 pt-2">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center font-headline-md shadow-sm">
+<span class="material-symbols-outlined" data-icon="ac_unit" style="font-variation-settings: 'FILL' 1;">ac_unit</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm text-primary tracking-tight">FrostGuard AI</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Cold-Chain Telemetry MVP</div>
+</div>
+</div>
+<!-- Demo CTA Badge -->
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-2.5 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface">Simulated Sensor Feed • Demo Mode</span>
+</div>
+<!-- Navigation Tabs List -->
+<nav class="flex flex-col gap-1">
+<!-- 1. Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- 2. Live Monitoring (ACTIVE MATCH) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container text-primary font-headline-sm hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99] border-l-4 border-primary" href="#">
+<span class="material-symbols-outlined" data-icon="sensors" style="font-variation-settings: 'FILL' 1;">sensors</span>
+<span>Live Monitoring</span>
+</a>
+<!-- 3. Predictions -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span>Predictions</span>
+</a>
+<!-- 4. Alerts -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+<div class="flex items-center justify-between w-full">
+<span>Alerts</span>
+<span class="bg-error-container text-on-error-container font-label-sm text-label-sm px-1.5 py-0.5 rounded-full">1</span>
+</div>
+</a>
+<!-- 5. Storage Units -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined" data-icon="ac_unit">ac_unit</span>
+<span>Storage Units</span>
+</a>
+<!-- 6. Reports -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span>Reports</span>
+</a>
+<!-- 7. Settings -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+</div>
+<!-- SideNav Footer -->
+<div class="pt-4 border-t border-outline-variant flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:text-on-surface font-body-sm hover:bg-surface-container-low transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="monitor_heart">monitor_heart</span>
+<span>System Health</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:text-on-surface font-body-sm hover:bg-surface-container-low transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span>Documentation</span>
+</a>
+<div class="mt-3 px-3 py-2 bg-surface-container-low rounded text-on-surface-variant font-label-sm text-label-sm">
+        Firmware v2.4-ble-sim
+      </div>
+</div>
+</aside>
+<!-- ==================== SHARED COMPONENT: TopNavBar ==================== -->
+<header class="fixed top-0 right-0 left-72 h-16 px-6 flex items-center justify-between z-30 bg-surface-container-lowest border-b border-outline-variant shadow-sm">
+<!-- Left: Search Box -->
+<div class="flex items-center w-80">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[20px]" data-icon="search">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-surface-bright border border-outline-variant rounded-lg font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary" placeholder="Search sensor tags, batches, units..." type="text"/>
+</div>
+</div>
+<!-- Right: Status Pill, Icon Actions, Demo Operator -->
+<div class="flex items-center gap-4">
+<!-- Demo Feed Live Action Tag -->
+<div class="flex items-center gap-2 bg-surface-container text-primary px-3 py-1.5 rounded-full border border-primary-fixed shadow-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-ping"></span>
+<span class="font-label-sm text-label-sm font-semibold tracking-wide">Demo Feed: Live (1s)</span>
+</div>
+<div class="h-5 w-px bg-outline-variant"></div>
+<!-- Icon Actions -->
+<button class="relative p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors active:scale-95" title="Notifications">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full ring-2 ring-surface-container-lowest"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors active:scale-95" title="Telemetry Schedule">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+</button>
+<div class="h-5 w-px bg-outline-variant"></div>
+<!-- Operator Profile -->
+<div class="flex items-center gap-3 pl-1">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-headline-sm border border-outline-variant shadow-sm">
+<span class="font-label-sm text-label-sm font-bold">OP</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-headline-sm text-on-surface leading-tight">Demo Operator</span>
+<span class="font-label-sm text-label-sm text-outline">Lab Supervisor #04</span>
+</div>
+</div>
+</div>
+</header>
+<!-- ==================== MAIN CONTENT CANVAS ==================== -->
+<main class="ml-72 mt-16 p-8 flex flex-col gap-6">
+<!-- ACADEMIC DISCLAIMER BANNER -->
+<div class="bg-surface-container-high border-l-4 border-primary rounded-lg p-3.5 flex items-center justify-between text-on-surface shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="info" style="font-variation-settings: 'FILL' 1;">info</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-primary mr-1">SIMULATED DEMO ENVIRONMENT •</span>
+<span class="font-body-sm text-body-sm text-on-surface">Academic Prototype: Not intended for clinical or production medical deployment. Data shown is simulated sensor telemetry.</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container-lowest px-2 py-0.5 rounded border border-outline-variant text-outline">BioMed IoT Sandbox</span>
+</div>
+<!-- PAGE CONTROL HEADER -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<div class="flex items-center gap-3">
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Live Telemetry &amp; Unit Monitoring</h1>
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-lowest rounded-full border border-tertiary-fixed shadow-sm">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-tertiary font-semibold">Stream active • 1 Hz sampling rate</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Multi-point real-time cryogenic and refrigerated cold-chain verification telemetry.</p>
+</div>
+<!-- Action Controls -->
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 bg-error text-on-error font-headline-sm text-headline-sm rounded-lg shadow-sm hover:opacity-95 transition-all flex items-center gap-2 active:scale-95" id="spikeBtn" onclick="simulateSpike()">
+<span class="material-symbols-outlined" data-icon="electric_bolt">electric_bolt</span>
+<span>Simulate Temperature Spike</span>
+</button>
+<button class="px-3.5 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface hover:bg-surface-container-low transition-colors font-headline-sm text-headline-sm flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+<span>Calibrate</span>
+</button>
+</div>
+</div>
+<!-- FILTER CHIPS BAR -->
+<div class="flex items-center gap-2 border-b border-outline-variant pb-3">
+<button class="px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-primary text-on-primary font-semibold shadow-sm">
+        All Units (4)
+      </button>
+<button class="px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container border border-outline-variant transition-colors">
+        Compliant (3)
+      </button>
+<button class="px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-surface-container-lowest text-error hover:bg-error-container border border-outline-variant transition-colors flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+        Warning/Anomaly (1)
+      </button>
+<button class="px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-surface-container-lowest text-outline hover:bg-surface-container border border-outline-variant transition-colors">
+        Offline (0)
+      </button>
+</div>
+<!-- QUICK METRICS 4-UP ROW -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- 1: Avg Temp -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm uppercase">Avg Fleet Temperature</span>
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="thermostat">thermostat</span>
+</div>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="font-telemetry-metric text-telemetry-metric text-primary">+4.5°C</span>
+<span class="font-label-sm text-label-sm text-tertiary font-semibold flex items-center">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span> Target Safe
+          </span>
+</div>
+<div class="font-body-sm text-body-sm text-outline mt-1">Optimal target range +2°C to +8°C</div>
+</div>
+<!-- 2: Total Monitored Doses -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm uppercase">Total Monitored Doses</span>
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="vaccines">vaccines</span>
+</div>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="font-telemetry-metric text-telemetry-metric text-on-surface">12,450</span>
+<span class="font-label-sm text-label-sm text-outline">Vials</span>
+</div>
+<div class="font-body-sm text-body-sm text-outline mt-1">Vaccine Doses (Simulated inventory)</div>
+</div>
+<!-- 3: Compliance Rate -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm uppercase">Real-Time Compliance Rate</span>
+<span class="material-symbols-outlined text-tertiary text-[20px]" data-icon="verified">verified</span>
+</div>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="font-telemetry-metric text-telemetry-metric text-tertiary">96.8%</span>
+<span class="font-label-sm text-label-sm text-tertiary font-medium">1 Excursion alert</span>
+</div>
+<div class="font-body-sm text-body-sm text-outline mt-1">GXP 21 CFR Part 11 Audit Grade</div>
+</div>
+<!-- 4: Sensor Network Latency -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm uppercase">Sensor Network Latency</span>
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="router">router</span>
+</div>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="font-telemetry-metric text-telemetry-metric text-on-surface">42ms</span>
+<span class="font-label-sm text-label-sm text-tertiary">Active mesh</span>
+</div>
+<div class="font-body-sm text-body-sm text-outline mt-1">Simulated BLE Gateway • 4 nodes</div>
+</div>
+</div>
+<!-- DETAILED STORAGE UNIT CARDS GRID (2x2) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- UNIT 1: STORAGE UNIT A -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-6 shadow-sm flex flex-col justify-between hover:border-primary transition-colors">
+<!-- Top Info Header -->
+<div>
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Storage Unit A - Primary Clinical Refrigerator</h3>
+</div>
+<div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-on-surface-variant font-body-sm text-body-sm mt-1">
+<span><strong class="text-on-surface">Room:</strong> Cold Storage Lab 101</span>
+<span>•</span>
+<span><strong class="text-on-surface">Vaccines:</strong> mRNA-1273 &amp; BNT162b2</span>
+<span>•</span>
+<span><strong class="text-on-surface">Doses:</strong> 4,200</span>
+</div>
+</div>
+<!-- Status Badge Safe -->
+<div class="flex items-center gap-1.5 px-3 py-1 bg-surface-container rounded-full border border-tertiary-fixed text-tertiary">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Safe</span>
+</div>
+</div>
+<!-- Metric Core & Horizontal Gauge -->
+<div class="mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface-container-low p-4 rounded-xl border border-outline-variant">
+<div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">CURRENT TEMPERATURE</div>
+<div class="font-telemetry-metric text-telemetry-metric text-tertiary font-bold">+4.2°C</div>
+<div class="font-label-sm text-label-sm text-outline mt-0.5">Target Range: +2.0°C to +8.0°C</div>
+</div>
+<!-- Horizontal Range Thermometer Bar -->
+<div class="w-full sm:w-60">
+<div class="flex justify-between font-label-sm text-label-sm text-outline mb-1">
+<span>0°C</span>
+<span class="text-tertiary font-semibold">Safe (+2° to +8°)</span>
+<span>10°C</span>
+</div>
+<div class="relative h-3 bg-surface-container-high rounded-full overflow-hidden border border-outline-variant">
+<!-- Zone markers: 2°C (20%) to 8°C (80%) safe zone -->
+<div class="absolute left-[20%] right-[20%] top-0 bottom-0 bg-tertiary-fixed-dim/40 border-x border-tertiary/40"></div>
+<!-- Needle position for +4.2°C -> 42% -->
+<div class="absolute top-0 bottom-0 w-2.5 bg-tertiary rounded-full shadow-md -ml-1 left-[42%]"></div>
+</div>
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant mt-1">
+<span>Lower (+2°C)</span>
+<span>Target (+4.5°C)</span>
+<span>Upper (+8°C)</span>
+</div>
+</div>
+</div>
+<!-- Secondary Telemetry Row -->
+<div class="grid grid-cols-3 gap-3 mt-4 text-center">
+<div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant">
+<div class="font-label-sm text-label-sm text-outline">HUMIDITY</div>
+<div class="font-headline-sm text-headline-sm text-on-surface mt-0.5">48% RH</div>
+<div class="font-label-sm text-label-sm text-tertiary">Optimal: 40-60%</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant">
+<div class="font-label-sm text-label-sm text-outline">DOOR SEAL</div>
+<div class="font-headline-sm text-headline-sm text-tertiary mt-0.5">Intact</div>
+<div class="font-label-sm text-label-sm text-outline">Magnetic Locked</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant">
+<div class="font-label-sm text-label-sm text-outline">BATTERY BACKUP</div>
+<div class="font-headline-sm text-headline-sm text-on-surface mt-0.5">98%</div>
+<div class="font-label-sm text-label-sm text-tertiary">Mains Online</div>
+</div>
+</div>
+<!-- SVG Sparkline Trend (Past 2 Hours steady +4.1 to +4.3) -->
+<div class="mt-4">
+<div class="flex items-center justify-between text-outline font-label-sm text-label-sm mb-1">
+<span>Past 2-Hour Thermal Log</span>
+<span>Variance: ±0.1°C</span>
+</div>
+<div class="h-16 w-full bg-surface-container-low rounded-lg p-2 border border-outline-variant flex items-center">
+<svg class="w-full h-full overflow-visible" viewbox="0 0 300 40">
+<!-- Upper limit guide (+8°C) -->
+<line stroke="#bfc7d2" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="300" y1="5" y2="5"></line>
+<!-- Lower limit guide (+2°C) -->
+<line stroke="#bfc7d2" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="300" y1="35" y2="35"></line>
+<!-- Safe Curve -->
+<polyline fill="none" points="0,20 25,19 50,21 75,20 100,19 125,20 150,21 175,20 200,19 225,20 250,19 275,20 300,19" stroke="#006947" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></polyline>
+</svg>
+</div>
+</div>
+</div>
+<!-- Card Footer -->
+<div class="mt-4 pt-3 border-t border-outline-variant flex items-center justify-between text-outline font-label-sm text-label-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="sync">sync</span>
+            Last updated: 2 seconds ago
+          </span>
+<span>Sensor SN: FG-TH-001</span>
+</div>
+</div>
+<!-- UNIT 2: STORAGE UNIT B (WARNING DRIFT) -->
+<div class="bg-surface-container-lowest rounded-xl border-2 border-error/50 p-6 shadow-md flex flex-col justify-between transition-all bg-error-container/10" id="unitBCard">
+<!-- Top Info Header -->
+<div>
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-error animate-ping"></span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Storage Unit B - Portable Cryo-Carrier</h3>
+</div>
+<div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-on-surface-variant font-body-sm text-body-sm mt-1">
+<span><strong class="text-on-surface">Location:</strong> Mobile Transit Unit #02</span>
+<span>•</span>
+<span><strong class="text-on-surface">Vaccines:</strong> Viral Vector COVID-19</span>
+<span>•</span>
+<span><strong class="text-on-surface">Doses:</strong> 1,850</span>
+</div>
+</div>
+<!-- Status Badge Warning Drift -->
+<div class="flex items-center gap-1.5 px-3 py-1 bg-error-container text-on-error-container rounded-full border border-error shadow-sm animate-pulse">
+<span class="material-symbols-outlined text-[16px]" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Warning</span>
+</div>
+</div>
+<!-- Metric Core & Horizontal Gauge -->
+<div class="mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface-container-low p-4 rounded-xl border border-outline-variant">
+<div>
+<div class="font-label-sm text-label-sm text-error font-semibold">CURRENT TEMPERATURE (DRIFT)</div>
+<div class="font-telemetry-metric text-telemetry-metric text-error font-bold" id="unitBTemp">+7.6°C</div>
+<div class="font-label-sm text-label-sm text-error mt-0.5">Threshold Breach Imminent: +8.0°C Limit</div>
+</div>
+<!-- Horizontal Range Bar with high warning point -->
+<div class="w-full sm:w-60">
+<div class="flex justify-between font-label-sm text-label-sm text-outline mb-1">
+<span>0°C</span>
+<span class="text-error font-bold">Approaching +8.0°C Upper Bound</span>
+<span>10°C</span>
+</div>
+<div class="relative h-3 bg-surface-container-high rounded-full overflow-hidden border border-outline-variant">
+<div class="absolute left-[20%] right-[20%] top-0 bottom-0 bg-tertiary-fixed-dim/40 border-x border-tertiary/40"></div>
+<!-- Needle position at +7.6°C -> 76% (Near upper bound) -->
+<div class="absolute top-0 bottom-0 w-3 bg-error rounded-full shadow-md -ml-1 left-[76%] ring-2 ring-error-container" id="unitBNeedle"></div>
+</div>
+<div class="flex justify-between font-label-sm text-label-sm text-error mt-1 font-semibold">
+<span>Safe (+2°C)</span>
+<span></span>
+<span>Critical (+8.0°C)</span>
+</div>
+</div>
+</div>
+<!-- Secondary Telemetry Row -->
+<div class="grid grid-cols-3 gap-3 mt-4 text-center">
+<div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant">
+<div class="font-label-sm text-label-sm text-error font-medium">HUMIDITY</div>
+<div class="font-headline-sm text-headline-sm text-error mt-0.5">64% RH</div>
+<div class="font-label-sm text-label-sm text-error">Elevated!</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant">
+<div class="font-label-sm text-label-sm text-error font-medium">DOOR SEAL</div>
+<div class="font-headline-sm text-headline-sm text-error mt-0.5">Vibration</div>
+<div class="font-label-sm text-label-sm text-outline">Lid Latch Disturbed</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant">
+<div class="font-label-sm text-label-sm text-outline">BATTERY BACKUP</div>
+<div class="font-headline-sm text-headline-sm text-on-surface mt-0.5">84%</div>
+<div class="font-label-sm text-label-sm text-outline">In Transit (Vehicle)</div>
+</div>
+</div>
+<!-- SVG Sparkline Trend (Drift from 4.5 up to 7.6) -->
+<div class="mt-4">
+<div class="flex items-center justify-between text-outline font-label-sm text-label-sm mb-1">
+<span class="text-error font-semibold">45-Minute Excursion Trajectory</span>
+<span class="text-error font-label-sm text-label-sm">Slope: +0.07°C/min</span>
+</div>
+<div class="h-16 w-full bg-surface-container-low rounded-lg p-2 border border-outline-variant flex items-center">
+<svg class="w-full h-full overflow-visible" viewbox="0 0 300 40">
+<!-- Upper limit guide (+8°C) -->
+<line stroke="#ba1a1a" stroke-dasharray="3,3" stroke-width="1.5" x1="0" x2="300" y1="6" y2="6"></line>
+<!-- Safe Curve drifting upward into alarm -->
+<polyline fill="none" points="0,28 30,27 60,26 90,25 120,23 150,20 180,18 210,14 240,11 270,8 300,6" stroke="#ba1a1a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></polyline>
+<!-- Terminal alert dot -->
+<circle class="animate-ping" cx="300" cy="6" fill="#ba1a1a" r="4"></circle>
+<circle cx="300" cy="6" fill="#ba1a1a" r="3"></circle>
+</svg>
+</div>
+</div>
+<!-- Excursion Action Buttons as required -->
+<div class="flex items-center gap-3 mt-4">
+<button class="flex-1 py-2 px-3 bg-error text-on-error font-headline-sm text-headline-sm rounded-lg hover:bg-error-container hover:text-on-error-container transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="search_insights">search_insights</span>
+<span>Inspect Drift</span>
+</button>
+<button class="flex-1 py-2 px-3 bg-surface-container-lowest border border-outline-variant text-primary font-headline-sm text-headline-sm rounded-lg hover:bg-surface-container-low transition-colors flex items-center justify-center gap-1.5 shadow-sm" onclick="refreshCoolant()">
+<span class="material-symbols-outlined text-[18px]" data-icon="ac_unit">ac_unit</span>
+<span>Simulate Coolant Pack Refresh</span>
+</button>
+</div>
+</div>
+<!-- Card Footer -->
+<div class="mt-4 pt-3 border-t border-outline-variant flex items-center justify-between text-outline font-label-sm text-label-sm">
+<span class="flex items-center gap-1 text-error font-medium">
+<span class="material-symbols-outlined text-[14px]" data-icon="priority_high">priority_high</span>
+            Last updated: 1 second ago
+          </span>
+<span>Sensor SN: FG-TH-002</span>
+</div>
+</div>
+<!-- UNIT 3: STORAGE UNIT C -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-6 shadow-sm flex flex-col justify-between hover:border-primary transition-colors">
+<!-- Top Info Header -->
+<div>
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Storage Unit C - Deep Reserve Storage</h3>
+</div>
+<div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-on-surface-variant font-body-sm text-body-sm mt-1">
+<span><strong class="text-on-surface">Location:</strong> Central Repository Bay B</span>
+<span>•</span>
+<span><strong class="text-on-surface">Vaccines:</strong> Pediatric Multi-Dose Vials</span>
+<span>•</span>
+<span><strong class="text-on-surface">Doses:</strong> 3,900</span>
+</div>
+</div>
+<!-- Safe Badge -->
+<div class="flex items-center gap-1.5 px-3 py-1 bg-surface-container rounded-full border border-tertiary-fixed text-tertiary">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Safe</span>
+</div>
+</div>
+<!-- Metric Core & Horizontal Gauge -->
+<div class="mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface-container-low p-4 rounded-xl border border-outline-variant">
+<div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">CURRENT TEMPERATURE</div>
+<div class="font-telemetry-metric text-telemetry-metric text-tertiary font-bold">+3.8°C</div>
+<div class="font-label-sm text-label-sm text-outline mt-0.5">Target Range: +2.0°C to +8.0°C</div>
+</div>
+<!-- Horizontal Range Bar (Centered) -->
+<div class="w-full sm:w-60">
+<div class="flex justify-between font-label-sm text-label-sm text-outline mb-1">
+<span>0°C</span>
+<span class="text-tertiary font-semibold">Optimal Center</span>
+<span>10°C</span>
+</div>
+<div class="relative h-3 bg-surface-container-high rounded-full overflow-hidden border border-outline-variant">
+<div class="absolute left-[20%] right-[20%] top-0 bottom-0 bg-tertiary-fixed-dim/40 border-x border-tertiary/40"></div>
+<!-- Needle at +3.8°C -> 38% -->
+<div class="absolute top-0 bottom-0 w-2.5 bg-tertiary rounded-full shadow-md -ml-1 left-[38%]"></div>
+</div>
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant mt-1">
+<span>+2.0°C</span>
+<span>+4.0°C</span>
+<span>+8.0°C</span>
+</div>
+</div>
+</div>
+<!-- Secondary Telemetry Row -->
+<div class="grid grid-cols-3 gap-3 mt-4 text-center">
+<div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant">
+<div class="font-label-sm text-label-sm text-outline">HUMIDITY</div>
+<div class="font-headline-sm text-headline-sm text-on-surface mt-0.5">45% RH</div>
+<div class="font-label-sm text-label-sm text-tertiary">Optimal</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant">
+<div class="font-label-sm text-label-sm text-outline">DOOR SEAL</div>
+<div class="font-headline-sm text-headline-sm text-tertiary mt-0.5">Hermetic</div>
+<div class="font-label-sm text-label-sm text-tertiary">Active Seal</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant">
+<div class="font-label-sm text-label-sm text-outline">BATTERY BACKUP</div>
+<div class="font-headline-sm text-headline-sm text-on-surface mt-0.5">100%</div>
+<div class="font-label-sm text-label-sm text-tertiary">Mains Online</div>
+</div>
+</div>
+<!-- SVG Sparkline Trend (Past 2 Hours stable 3.8 line) -->
+<div class="mt-4">
+<div class="flex items-center justify-between text-outline font-label-sm text-label-sm mb-1">
+<span>Reserve Chamber Baseline</span>
+<span>Ultra-Stable: σ=0.04</span>
+</div>
+<div class="h-16 w-full bg-surface-container-low rounded-lg p-2 border border-outline-variant flex items-center">
+<svg class="w-full h-full overflow-visible" viewbox="0 0 300 40">
+<line stroke="#bfc7d2" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="300" y1="6" y2="6"></line>
+<line stroke="#bfc7d2" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="300" y1="34" y2="34"></line>
+<polyline fill="none" points="0,22 30,22 60,22 90,21 120,22 150,22 180,22 210,21 240,22 270,22 300,22" stroke="#006947" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></polyline>
+</svg>
+</div>
+</div>
+</div>
+<!-- Card Footer -->
+<div class="mt-4 pt-3 border-t border-outline-variant flex items-center justify-between text-outline font-label-sm text-label-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="sync">sync</span>
+            Last updated: 3 seconds ago
+          </span>
+<span>Sensor SN: FG-TH-003</span>
+</div>
+</div>
+<!-- UNIT 4: STORAGE UNIT D -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-6 shadow-sm flex flex-col justify-between hover:border-primary transition-colors">
+<!-- Top Info Header -->
+<div>
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Storage Unit D - Outpatient Dispensing Refrigerator</h3>
+</div>
+<div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-on-surface-variant font-body-sm text-body-sm mt-1">
+<span><strong class="text-on-surface">Location:</strong> Clinic Ward Dispensing 4</span>
+<span>•</span>
+<span><strong class="text-on-surface">Vaccines:</strong> Influenza &amp; Rabies</span>
+<span>•</span>
+<span><strong class="text-on-surface">Doses:</strong> 2,500</span>
+</div>
+</div>
+<!-- Safe Badge -->
+<div class="flex items-center gap-1.5 px-3 py-1 bg-surface-container rounded-full border border-tertiary-fixed text-tertiary">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Safe</span>
+</div>
+</div>
+<!-- Metric Core & Horizontal Gauge -->
+<div class="mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface-container-low p-4 rounded-xl border border-outline-variant">
+<div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">CURRENT TEMPERATURE</div>
+<div class="font-telemetry-metric text-telemetry-metric text-tertiary font-bold">+4.9°C</div>
+<div class="font-label-sm text-label-sm text-outline mt-0.5">Target Range: +2.0°C to +8.0°C</div>
+</div>
+<!-- Horizontal Range Bar -->
+<div class="w-full sm:w-60">
+<div class="flex justify-between font-label-sm text-label-sm text-outline mb-1">
+<span>0°C</span>
+<span class="text-tertiary font-semibold">Nominal Dispensing</span>
+<span>10°C</span>
+</div>
+<div class="relative h-3 bg-surface-container-high rounded-full overflow-hidden border border-outline-variant">
+<div class="absolute left-[20%] right-[20%] top-0 bottom-0 bg-tertiary-fixed-dim/40 border-x border-tertiary/40"></div>
+<!-- Needle at +4.9°C -> 49% -->
+<div class="absolute top-0 bottom-0 w-2.5 bg-tertiary rounded-full shadow-md -ml-1 left-[49%]"></div>
+</div>
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant mt-1">
+<span>+2.0°C</span>
+<span>+5.0°C</span>
+<span>+8.0°C</span>
+</div>
+</div>
+</div>
+<!-- Secondary Telemetry Row -->
+<div class="grid grid-cols-3 gap-3 mt-4 text-center">
+<div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant">
+<div class="font-label-sm text-label-sm text-outline">HUMIDITY</div>
+<div class="font-headline-sm text-headline-sm text-on-surface mt-0.5">49% RH</div>
+<div class="font-label-sm text-label-sm text-tertiary">Optimal</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant">
+<div class="font-label-sm text-label-sm text-outline">DOOR SEAL</div>
+<div class="font-headline-sm text-headline-sm text-on-surface mt-0.5">Closed</div>
+<div class="font-label-sm text-label-sm text-outline">Opened 14m ago</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant">
+<div class="font-label-sm text-label-sm text-outline">BATTERY BACKUP</div>
+<div class="font-headline-sm text-headline-sm text-on-surface mt-0.5">91%</div>
+<div class="font-label-sm text-label-sm text-tertiary">Healthy</div>
+</div>
+</div>
+<!-- SVG Sparkline Trend (Dips showing door openings safely inside bounds) -->
+<div class="mt-4">
+<div class="flex items-center justify-between text-outline font-label-sm text-label-sm mb-1">
+<span>Operational Thermal Curve (Door Activity)</span>
+<span>Recovery Time: 3.2m</span>
+</div>
+<div class="h-16 w-full bg-surface-container-low rounded-lg p-2 border border-outline-variant flex items-center">
+<svg class="w-full h-full overflow-visible" viewbox="0 0 300 40">
+<line stroke="#bfc7d2" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="300" y1="5" y2="5"></line>
+<line stroke="#bfc7d2" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="300" y1="35" y2="35"></line>
+<!-- Curve showing minor temporary transient spikes and recoveries -->
+<polyline fill="none" points="0,18 40,18 60,13 75,18 120,18 150,12 170,18 220,18 245,15 260,18 300,18" stroke="#006947" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></polyline>
+</svg>
+</div>
+</div>
+</div>
+<!-- Card Footer -->
+<div class="mt-4 pt-3 border-t border-outline-variant flex items-center justify-between text-outline font-label-sm text-label-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="sync">sync</span>
+            Last updated: 4 seconds ago
+          </span>
+<span>Sensor SN: FG-TH-004</span>
+</div>
+</div>
+</div>
+<!-- BOTTOM FLEET COMBINED STREAM TIMELINE MODULE -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-6 shadow-sm">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-outline-variant">
+<div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="ssid_chart">ssid_chart</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Expanded Fleet Multi-Channel Comparison Timeline</h3>
+</div>
+<p class="font-body-sm text-body-sm text-outline mt-0.5">Real-time synchronized continuous sensor telemetry across all active cold-chain nodes.</p>
+</div>
+<!-- Refresh Rate Toggle Buttons -->
+<div class="flex items-center bg-surface-container-low p-1 rounded-lg border border-outline-variant">
+<span class="font-label-sm text-label-sm text-outline px-2">Sample Interval:</span>
+<button class="px-2.5 py-1 rounded font-label-sm text-label-sm bg-primary text-on-primary font-semibold shadow-sm">
+            1s (Demo)
+          </button>
+<button class="px-2.5 py-1 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors">
+            5s
+          </button>
+<button class="px-2.5 py-1 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors">
+            30s
+          </button>
+<button class="px-2.5 py-1 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="pause">pause</span>
+<span>Pause</span>
+</button>
+</div>
+</div>
+<!-- Live Stream SVG Multi-Line Chart -->
+<div class="mt-4 relative bg-surface-container-low rounded-xl p-4 border border-outline-variant">
+<!-- Legend Bar -->
+<div class="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-outline-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1.5 text-on-surface">
+<span class="w-3 h-1 bg-primary rounded-full"></span>
+              Unit A (Lab 101)
+            </span>
+<span class="flex items-center gap-1.5 text-error font-semibold">
+<span class="w-3 h-1 bg-error rounded-full"></span>
+              Unit B (Transit #02 Drift)
+            </span>
+<span class="flex items-center gap-1.5 text-tertiary">
+<span class="w-3 h-1 bg-tertiary rounded-full"></span>
+              Unit C (Bay B)
+            </span>
+<span class="flex items-center gap-1.5 text-secondary">
+<span class="w-3 h-1 bg-secondary rounded-full"></span>
+              Unit D (Ward 4)
+            </span>
+</div>
+<div class="flex items-center gap-3 text-outline">
+<span class="flex items-center gap-1">
+<span class="w-2.5 h-0.5 border-t-2 border-dashed border-error"></span> Upper Excursion Bound (+8.0°C)
+            </span>
+<span class="flex items-center gap-1">
+<span class="w-2.5 h-0.5 border-t-2 border-dashed border-primary"></span> Lower Excursion Bound (+2.0°C)
+            </span>
+</div>
+</div>
+<!-- Timeline Graphic SVG Stream -->
+<div class="h-56 w-full pt-3">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 1000 200">
+<!-- Grid Lines -->
+<line stroke="#ffdad6" stroke-dasharray="4,4" stroke-width="1.5" x1="0" x2="1000" y1="20" y2="20"></line>
+<text class="font-label-sm text-[10px]" fill="#ba1a1a" x="10" y="16">+8.0°C (CRITICAL UPPER BOUND)</text>
+<line stroke="#bfc7d2" stroke-dasharray="2,2" stroke-width="1" x1="0" x2="1000" y1="100" y2="100"></line>
+<text class="font-label-sm text-[10px]" fill="#707881" x="10" y="96">+5.0°C (MEDIAN TARGET)</text>
+<line stroke="#cce5ff" stroke-dasharray="4,4" stroke-width="1.5" x1="0" x2="1000" y1="180" y2="180"></line>
+<text class="font-label-sm text-[10px]" fill="#006194" x="10" y="176">+2.0°C (LOWER LIMIT)</text>
+<!-- Stream Unit A (Lab 101 - Primary Blue) -->
+<path d="M 0,110 Q 150,108 300,112 T 600,110 T 900,111 T 1000,110" fill="none" stroke="#006194" stroke-width="2.5"></path>
+<!-- Stream Unit B (Mobile Transit Drift - Red/Amber) -->
+<path d="M 0,105 Q 250,95 500,65 T 750,38 T 900,28 T 1000,24" fill="none" id="streamUnitB" stroke="#ba1a1a" stroke-linecap="round" stroke-width="3"></path>
+<circle class="animate-ping" cx="1000" cy="24" fill="#ba1a1a" r="5"></circle>
+<circle cx="1000" cy="24" fill="#ba1a1a" r="3.5"></circle>
+<!-- Stream Unit C (Deep Reserve - Tertiary Green) -->
+<path d="M 0,125 Q 200,124 400,125 T 700,126 T 1000,125" fill="none" stroke="#006947" stroke-width="2"></path>
+<!-- Stream Unit D (Outpatient - Secondary Slate with step spikes) -->
+<path d="M 0,98 Q 120,98 180,85 T 240,98 T 480,90 T 540,98 T 800,98 T 1000,98" fill="none" stroke="#565e74" stroke-dasharray="6,2" stroke-width="2"></path>
+</svg>
+</div>
+<!-- Time Ticks Axis -->
+<div class="flex justify-between text-outline font-label-sm text-label-sm pt-2 border-t border-outline-variant">
+<span>T - 60 min</span>
+<span>T - 45 min</span>
+<span>T - 30 min</span>
+<span>T - 15 min</span>
+<span>T - 5 min</span>
+<span class="text-tertiary font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-ping"></span>
+            LIVE NOW (T-0)
+          </span>
+</div>
+</div>
+<!-- Quick Action Controls & Export Bar -->
+<div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-tertiary" data-icon="check_circle">check_circle</span>
+<span>Zero sensor transmission packet drops in current session (4,320 of 4,320 verified packets).</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 bg-surface-container-low hover:bg-surface-container border border-outline-variant rounded-lg text-on-surface font-headline-sm text-headline-sm transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="download">download</span>
+<span>Export CSV</span>
+</button>
+<button class="px-3 py-1.5 bg-surface-container-low hover:bg-surface-container border border-outline-variant rounded-lg text-on-surface font-headline-sm text-headline-sm transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="print">print</span>
+<span>Audit PDF</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Interactive Demo Logic for MVP Telemetry Actions -->
+<script>
+    let isSpiked = false;
+    function simulateSpike() {
+      const tempB = document.getElementById('unitBTemp');
+      const needleB = document.getElementById('unitBNeedle');
+      const spikeBtn = document.getElementById('spikeBtn');
+
+      if (!isSpiked) {
+        tempB.innerText = '+8.4°C [BREACH]';
+        needleB.style.left = '84%';
+        needleB.classList.add('bg-error');
+        spikeBtn.innerHTML = '<span class="material-symbols-outlined">restart_alt</span><span>Reset Telemetry Stream</span>';
+        isSpiked = true;
+      } else {
+        tempB.innerText = '+7.6°C';
+        needleB.style.left = '76%';
+        spikeBtn.innerHTML = '<span class="material-symbols-outlined">electric_bolt</span><span>Simulate Temperature Spike</span>';
+        isSpiked = false;
+      }
+    }
+
+    function refreshCoolant() {
+      const tempB = document.getElementById('unitBTemp');
+      const needleB = document.getElementById('unitBNeedle');
+      tempB.innerText = '+4.1°C [RESTORED]';
+      tempB.className = 'font-telemetry-metric text-telemetry-metric text-tertiary font-bold';
+      needleB.style.left = '41%';
+      needleB.className = 'absolute top-0 bottom-0 w-2.5 bg-tertiary rounded-full shadow-md -ml-1 left-[41%]';
+      alert('Simulated Coolant Pack Refresh executed. Unit B temperature stabilizing down to safe median (+4.1°C).');
+    }
+  </script>
+</body></html>

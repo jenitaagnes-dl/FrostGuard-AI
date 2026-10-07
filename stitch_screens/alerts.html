@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FrostGuard AI - Cold-Chain Alerts &amp; Excursion Triage</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-tint": "#006398",
+            "tertiary-container": "#00855b",
+            "surface-container-highest": "#d3e4fe",
+            "secondary-container": "#dae2fd",
+            "on-background": "#0b1c30",
+            "surface-variant": "#d3e4fe",
+            "inverse-on-surface": "#eaf1ff",
+            "on-tertiary-fixed-variant": "#005236",
+            "primary-container": "#007bb9",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6",
+            "outline": "#707881",
+            "outline-variant": "#bfc7d2",
+            "surface-container-high": "#dce9ff",
+            "secondary-fixed-dim": "#bec6e0",
+            "primary-fixed": "#cce5ff",
+            "on-secondary-fixed-variant": "#3f465c",
+            "surface": "#f8f9ff",
+            "primary-fixed-dim": "#93ccff",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#4edea3",
+            "error": "#ba1a1a",
+            "surface-container": "#e5eeff",
+            "on-primary-container": "#fdfcff",
+            "on-tertiary-fixed": "#002113",
+            "on-primary-fixed": "#001d31",
+            "primary": "#006194",
+            "secondary-fixed": "#dae2fd",
+            "tertiary": "#006947",
+            "inverse-primary": "#93ccff",
+            "on-secondary-container": "#5c647a",
+            "background": "#f8f9ff",
+            "tertiary-fixed": "#6ffbbe",
+            "surface-container-low": "#eff4ff",
+            "secondary": "#565e74",
+            "on-secondary": "#ffffff",
+            "surface-dim": "#cbdbf5",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "inverse-surface": "#213145",
+            "surface-bright": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-surface": "#0b1c30",
+            "on-surface-variant": "#3f4850",
+            "on-tertiary-container": "#f5fff6",
+            "on-primary-fixed-variant": "#004b73",
+            "on-secondary-fixed": "#131b2e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "space-xl": "2rem",
+            "space-xs": "0.25rem",
+            "space-2xl": "3rem",
+            "gutter-mobile": "0.75rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.5rem",
+            "margin-mobile": "1rem",
+            "gutter": "1.5rem",
+            "margin": "2rem"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Inter"],
+            "headline-sm": ["Inter"],
+            "label-lg": ["JetBrains Mono"],
+            "telemetry-metric": ["JetBrains Mono"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "display-lg": ["Inter"],
+            "label-md": ["JetBrains Mono"],
+            "label-sm": ["JetBrains Mono"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-md": ["Inter"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "telemetry-metric": ["32px", { "lineHeight": "36px", "letterSpacing": "-0.03em", "fontWeight": "700" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0em", "fontWeight": "500" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased h-full overflow-hidden flex flex-col font-body-md">
+<!-- Prototype Top Alert Banner -->
+<aside aria-label="Simulated Environment Disclaimer" class="w-full bg-surface-container-high border-b border-outline-variant px-4 py-1.5 flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm z-50">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center justify-center w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-semibold text-primary">SIMULATED DEMO ENVIRONMENT</span>
+<span class="text-outline">•</span>
+<span>Academic Prototype: Simulated alert triage and excursion incident management. Build v1.2.4-Demo</span>
+</div>
+<div class="flex items-center gap-4 text-outline">
+<span class="font-label-sm">TELEMETRY_LATENCY: 12ms</span>
+<span class="text-outline">•</span>
+<span class="font-label-sm">SENSORS: 4/4 ACTIVE</span>
+</div>
+</aside>
+<!-- Shell Wrapper -->
+<div class="flex-1 flex overflow-hidden relative">
+<!-- Fixed Left Sidebar (SideNavBar Anchor) -->
+<nav aria-label="Main Navigation" class="fixed top-0 left-0 h-full w-72 flex flex-col justify-between p-4 z-40 bg-surface-container-lowest dark:bg-inverse-surface border-r border-outline-variant dark:border-outline shadow-sm dark:shadow-none">
+<div class="flex flex-col gap-6">
+<!-- Logo & Brand Header -->
+<div class="flex items-center gap-3 px-2 pt-2">
+<img alt="FrostGuard AI Cold Chain Shield Logo" class="w-10 h-10 rounded-lg object-contain border border-outline-variant p-0.5 bg-surface-container-lowest" src="https://lh3.googleusercontent.com/aida/AEtjO1VxyxXCL95Bzvwc4loDZuE_IleldGeBciB2Dd7QGSevEC73CCAUROYvNVwuIXLaga3wtk0cEM_NxXdL-8vorkizHs6adAwdy-KRu4Gum6IylpzCGN0Kn2UMthpt662a69jDf3iPXrBVF22-jUttEa8C1IcdyZpWbDjPQN3o7wi9GwAz4ha3Gl5cJqHM8l-Z-pPvCbhxTw9DIiRWDGR04rdDEqEJhD09Og-Dl7XYCMsaZFzVaKwBAAV0pYM"/>
+<div>
+<h1 class="text-headline-sm font-headline-sm text-primary dark:text-inverse-primary tracking-tight">FrostGuard AI</h1>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Cold-Chain Telemetry MVP</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-1">
+<!-- Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-outline" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Live Monitoring -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-outline" data-icon="sensors">sensors</span>
+<span>Live Monitoring</span>
+</a>
+<!-- Predictions -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-outline" data-icon="psychology">psychology</span>
+<span>Predictions</span>
+</a>
+<!-- Alerts (ACTIVE Tab) -->
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-surface-container dark:bg-surface-variant text-primary dark:text-inverse-primary font-headline-sm hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary font-bold" data-icon="warning" data-weight="fill" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span>Alerts</span>
+</div>
+<span class="inline-flex items-center justify-center px-1.5 py-0.5 text-label-sm font-label-sm font-bold bg-error text-on-error rounded-full">1</span>
+</a>
+<!-- Storage Units -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-outline" data-icon="ac_unit">ac_unit</span>
+<span>Storage Units</span>
+</a>
+<!-- Reports -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-outline" data-icon="assessment">assessment</span>
+<span>Reports</span>
+</a>
+<!-- Settings -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-outline" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</div>
+<!-- Bottom Status & Footer Links -->
+<div class="flex flex-col gap-3 pt-4 border-t border-outline-variant">
+<!-- Demo CTA Pill -->
+<div class="px-3 py-2 bg-surface-container-low rounded-lg border border-outline-variant flex items-center justify-between text-label-sm font-label-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span>
+<span>Simulated Sensor Feed • Demo Mode</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:text-on-surface font-body-sm hover:bg-surface-container-low transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-outline text-lg" data-icon="monitor_heart">monitor_heart</span>
+<span>System Health</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:text-on-surface font-body-sm hover:bg-surface-container-low transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-outline text-lg" data-icon="help">help</span>
+<span>Documentation</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Top Navigation Bar (TopNavBar Anchor) -->
+<header class="fixed top-0 right-0 left-72 h-16 px-6 flex items-center justify-between z-30 bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none" style="top: 29px;">
+<!-- Search Input on Left -->
+<div class="flex items-center w-96 relative">
+<span class="material-symbols-outlined absolute left-3 text-outline text-xl pointer-events-none" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" placeholder="Search alerts, incident IDs (e.g. ALT-2024), units..." type="text"/>
+</div>
+<!-- Right Header Actions -->
+<div class="flex items-center gap-4">
+<!-- Live Demo Feed Pill -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container text-primary font-label-sm text-label-sm border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+<span class="font-medium">Demo Feed: Live (1s)</span>
+</div>
+<!-- Trailing Icon Actions -->
+<button class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" title="Schedule">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+</button>
+<button class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" title="Notifications">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="h-6 w-px bg-outline-variant"></div>
+<!-- Operator Profile -->
+<div class="flex items-center gap-3 pl-1">
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center text-primary font-headline-sm text-xs">
+            OP
+          </div>
+<div class="flex flex-col text-left">
+<span class="text-body-sm font-headline-sm text-on-surface leading-none">MVP Demo Operator</span>
+<span class="text-label-sm font-label-sm text-outline">Lead Bio-Logistician</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-72 flex-1 overflow-y-auto bg-background p-6" style="margin-top: 64px;">
+<div class="max-w-[1440px] mx-auto space-y-6">
+<!-- Page Header & Global Triage Action Controls -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm">
+<div class="space-y-1">
+<div class="flex items-center gap-2.5">
+<h2 class="text-headline-lg font-headline-lg text-on-surface">Cold-Chain Alerts &amp; Excursion Triage</h2>
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-error-container text-on-error-container font-semibold">1 Active Alert</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant">Real-time threshold breaches, anomalous telemetry events, and simulated dispatch protocols</p>
+</div>
+<!-- Header Action Buttons -->
+<div class="flex items-center gap-3 flex-wrap">
+<button class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container-low border border-outline-variant hover:bg-surface-container text-on-surface font-body-md text-sm transition-colors active:scale-95">
+<span class="material-symbols-outlined text-outline text-lg" data-icon="file_download">file_download</span>
+<span>Export Incident Log (CSV)</span>
+</button>
+<button class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container border border-outline-variant hover:bg-surface-container-high text-primary font-headline-sm text-sm transition-colors active:scale-95">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="bolt">bolt</span>
+<span>Simulate New Alert</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-headline-sm text-sm shadow-sm transition-colors active:scale-95">
+<span class="material-symbols-outlined text-lg" data-icon="check_circle">check_circle</span>
+<span>Acknowledge All Warnings</span>
+</button>
+</div>
+</div>
+<!-- 4 KPI Summary Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Card 1: Critical Incidents -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-outline">Active Critical Incidents</span>
+<div class="p-1.5 rounded-lg bg-surface-container text-outline">
+<span class="material-symbols-outlined text-xl" data-icon="dangerous">dangerous</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="text-telemetry-metric font-telemetry-metric text-on-surface">0</span>
+<span class="text-label-md font-label-md text-outline">Active</span>
+</div>
+<div class="mt-2 flex items-center gap-1.5 text-label-sm font-label-sm text-tertiary">
+<span class="material-symbols-outlined text-sm font-bold" data-icon="verified_user">verified_user</span>
+<span>Nominal: 0 threshold breaches &gt;+8.0°C</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Warnings / Pre-Excursions -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between ring-1 ring-amber-400/40">
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-outline">Active Warnings / Pre-Breach</span>
+<div class="p-1.5 rounded-lg bg-amber-50 text-amber-700">
+<span class="material-symbols-outlined text-xl" data-icon="warning" data-weight="fill" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="text-telemetry-metric font-telemetry-metric text-amber-700">1</span>
+<span class="text-label-md font-label-md text-amber-700 font-medium">At-Risk</span>
+</div>
+<div class="mt-2 flex items-center gap-1.5 text-label-sm font-label-sm text-amber-800">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span>Unit B - Upward drift, ETA 42 min</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Resolved Past 24h -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-outline">Resolved Past 24h</span>
+<div class="p-1.5 rounded-lg bg-surface-container text-tertiary">
+<span class="material-symbols-outlined text-xl" data-icon="task_alt">task_alt</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="text-telemetry-metric font-telemetry-metric text-on-surface">7</span>
+<span class="text-label-md font-label-md text-outline">Incidents</span>
+</div>
+<div class="mt-2 flex items-center gap-1.5 text-label-sm font-label-sm text-outline">
+<span class="material-symbols-outlined text-sm" data-icon="timer">timer</span>
+<span>Mean resolution time: 4.8 min</span>
+</div>
+</div>
+</div>
+<!-- Card 4: Telemetry Anomaly Index -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-outline">Telemetry Anomaly Index</span>
+<div class="p-1.5 rounded-lg bg-surface-container text-primary">
+<span class="material-symbols-outlined text-xl" data-icon="insights">insights</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="text-telemetry-metric font-telemetry-metric text-on-surface">14%</span>
+<span class="text-label-md font-label-md text-primary font-medium">Low-Medium</span>
+</div>
+<div class="mt-2 flex items-center gap-1.5 text-label-sm font-label-sm text-outline">
+<span class="material-symbols-outlined text-sm" data-icon="model_training">model_training</span>
+<span>Based on simulated LSTM detector</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Active Excursion Deep-Dive Focal Card -->
+<div class="bg-surface-container-lowest rounded-xl border border-amber-300 shadow-sm overflow-hidden">
+<div class="bg-amber-50/80 px-6 py-3.5 border-b border-amber-200 flex flex-wrap items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<span class="flex h-3 w-3 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+</span>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded text-label-sm font-label-sm font-bold bg-amber-100 text-amber-900 border border-amber-300">ACTION REQUIRED</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Incident ALT-2024-089: Critical Upward Thermal Drift Detected</h3>
+</div>
+</div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-amber-900 font-mono">
+<span class="material-symbols-outlined text-base" data-icon="alarm">alarm</span>
+<span>TIME TO EXCURSION: ~42 MIN</span>
+</div>
+</div>
+<div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- Left Diagnostic Column -->
+<div class="lg:col-span-4 space-y-4 border-r lg:border-outline-variant pr-0 lg:pr-6">
+<div>
+<p class="text-label-sm font-label-sm text-outline uppercase tracking-wider">Affected Asset</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-headline-sm text-headline-sm text-on-surface">Storage Unit B</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm">Portable Cryo-Carrier #CC-842</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">Location: Transit Van 02 • Route Regional Hub #4</p>
+</div>
+<!-- Thermal Core Gauge Box -->
+<div class="p-4 rounded-lg bg-surface-container-low border border-outline-variant space-y-3">
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-outline">Current Core Telemetry</span>
+<span class="text-label-sm font-label-sm text-amber-800 bg-amber-100 px-2 py-0.5 rounded font-mono">+0.4°C / 10m drift</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-telemetry-metric font-telemetry-metric text-amber-700">+7.6°C</span>
+<span class="text-label-md font-label-md text-outline">/ Target +2.0°C to +8.0°C</span>
+</div>
+<!-- Range progress visualization bar -->
+<div class="space-y-1">
+<div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden flex">
+<div class="bg-blue-400 h-full" style="width: 25%"></div>
+<div class="bg-tertiary-container h-full" style="width: 60%"></div>
+<div class="bg-amber-500 h-full" style="width: 15%"></div>
+</div>
+<div class="flex justify-between text-label-sm font-label-sm text-outline font-mono">
+<span>+2.0°C (Min)</span>
+<span class="font-bold text-amber-700">+7.6°C (Now)</span>
+<span class="text-error font-bold">+8.0°C (Max)</span>
+</div>
+</div>
+</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant bg-surface-container-lowest p-3 rounded border border-outline-variant">
+<span class="font-semibold text-on-surface">Predictive Assessment:</span> Telemetry indicates latent insulation depletion or lid seal relaxation during transport vibrations. At current velocity, upper barrier (+8.0°C) will breach in 42 minutes.
+              </div>
+</div>
+<!-- Middle Column: Recommended SOP Checklist -->
+<div class="lg:col-span-5 space-y-4 border-r lg:border-outline-variant pr-0 lg:pr-6">
+<div class="flex items-center justify-between">
+<p class="text-label-sm font-label-sm text-outline uppercase tracking-wider">Simulated Triage Protocol (WHO PQS Standard)</p>
+<span class="text-label-sm font-label-sm text-tertiary font-medium">1 of 3 Completed</span>
+</div>
+<div class="space-y-2.5">
+<!-- Checklist Item 1 -->
+<label class="flex items-start gap-3 p-3 rounded-lg bg-surface-container-low border border-outline-variant cursor-pointer hover:bg-surface-container transition-colors">
+<input checked="" class="mt-0.5 h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<div class="space-y-0.5">
+<span class="text-body-sm font-headline-sm text-on-surface line-through opacity-75">1. Operator push notification dispatched</span>
+<p class="text-label-sm font-label-sm text-outline">Automated SMS/Push sent to Van 02 Driver (14:26:10)</p>
+</div>
+</label>
+<!-- Checklist Item 2 -->
+<label class="flex items-start gap-3 p-3 rounded-lg bg-surface-container-lowest border border-amber-300 cursor-pointer hover:bg-amber-50/50 transition-colors">
+<input class="mt-0.5 h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<div class="space-y-0.5">
+<span class="text-body-sm font-headline-sm text-amber-900 font-semibold">2. Inspect secondary mechanical latch &amp; seal</span>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Driver protocol: pull over safely and verify secondary compression latches.</p>
+</div>
+</label>
+<!-- Checklist Item 3 -->
+<label class="flex items-start gap-3 p-3 rounded-lg bg-surface-container-lowest border border-outline-variant cursor-pointer hover:bg-surface-container-low transition-colors">
+<input class="mt-0.5 h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<div class="space-y-0.5">
+<span class="text-body-sm font-headline-sm text-on-surface">3. Insert secondary conditioning cold-pack</span>
+<p class="text-label-sm font-label-sm text-outline">Activate pre-chilled dry-gel pack from emergency chamber slot 2.</p>
+</div>
+</label>
+</div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-outline">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+<span>Manual overrides are logged to tamper-proof mock telemetry audit trail.</span>
+</div>
+</div>
+<!-- Right Column: Dispatch & Actions -->
+<div class="lg:col-span-3 space-y-4 flex flex-col justify-between h-full">
+<div class="space-y-2">
+<p class="text-label-sm font-label-sm text-outline uppercase tracking-wider">Mitigation Controls</p>
+<button class="w-full py-2.5 px-4 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-headline-sm text-body-sm shadow-sm transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="play_arrow">play_arrow</span>
+<span>Execute Protocol</span>
+</button>
+<button class="w-full py-2 px-4 rounded-lg bg-surface-container-low border border-outline-variant hover:bg-surface-container text-on-surface font-body-md text-body-sm transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg text-outline" data-icon="snooze">snooze</span>
+<span>Mute Alert (15m)</span>
+</button>
+<button class="w-full py-2 px-4 rounded-lg bg-surface-container-low border border-outline-variant hover:bg-surface-container text-tertiary font-headline-sm text-body-sm transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="check_circle">check_circle</span>
+<span>Mark Resolved</span>
+</button>
+</div>
+<!-- Dispatch Note -->
+<div class="p-3 rounded-lg bg-surface-container-low border border-outline-variant text-label-sm font-label-sm space-y-1">
+<div class="text-on-surface font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-primary" data-icon="local_shipping">local_shipping</span>
+<span>Driver Contact:</span>
+</div>
+<div class="text-outline">Marcus Vance (+1 555-0192)</div>
+<div class="text-outline">Transit Speed: 52 mph (Steady)</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Filter & Search Toolbar Container -->
+<div class="space-y-3">
+<!-- Segmented Filter Pills -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1">
+<button class="px-3.5 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-medium transition-colors shadow-sm">
+              All Alerts (8)
+            </button>
+<button class="px-3.5 py-1.5 rounded-lg bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container border border-outline-variant font-label-md text-label-md font-medium transition-colors flex items-center gap-1.5">
+<span>Active / Unresolved</span>
+<span class="px-1.5 py-0.2 bg-amber-100 text-amber-800 rounded-full text-xs font-bold">1</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-lg bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container border border-outline-variant font-label-md text-label-md font-medium transition-colors">
+              Critical Excursions (0)
+            </button>
+<button class="px-3.5 py-1.5 rounded-lg bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container border border-outline-variant font-label-md text-label-md font-medium transition-colors">
+              Warnings / Pre-Breach (1)
+            </button>
+<button class="px-3.5 py-1.5 rounded-lg bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container border border-outline-variant font-label-md text-label-md font-medium transition-colors">
+              System / Hardware (2)
+            </button>
+<button class="px-3.5 py-1.5 rounded-lg bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container border border-outline-variant font-label-md text-label-md font-medium transition-colors">
+              Resolved (5)
+            </button>
+</div>
+<!-- Secondary Filter Bar with Dropdowns -->
+<div class="flex flex-wrap items-center justify-between gap-3 bg-surface-container-lowest p-3.5 rounded-xl border border-outline-variant shadow-sm">
+<div class="flex items-center gap-3 flex-1 min-w-[280px]">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-lg pointer-events-none" data-icon="filter_list">filter_list</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-surface border border-outline-variant rounded-lg text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary" placeholder="Filter by event keyword or incident identifier..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-wrap">
+<!-- Severity Dropdown -->
+<div class="flex items-center gap-1.5 bg-surface border border-outline-variant rounded-lg px-2.5 py-1.5 text-body-sm font-body-sm text-on-surface">
+<span class="text-outline text-label-sm font-label-sm">Severity:</span>
+<select class="bg-transparent border-none p-0 pr-4 text-body-sm font-headline-sm text-on-surface focus:ring-0 cursor-pointer">
+<option>All Severities</option>
+<option>Critical (Breach)</option>
+<option>Warning (Drift)</option>
+<option>System Info</option>
+</select>
+</div>
+<!-- Storage Unit Dropdown -->
+<div class="flex items-center gap-1.5 bg-surface border border-outline-variant rounded-lg px-2.5 py-1.5 text-body-sm font-body-sm text-on-surface">
+<span class="text-outline text-label-sm font-label-sm">Unit:</span>
+<select class="bg-transparent border-none p-0 pr-4 text-body-sm font-headline-sm text-on-surface focus:ring-0 cursor-pointer">
+<option>All Units (4)</option>
+<option>Storage Unit A (Bio-Freezer #01)</option>
+<option>Storage Unit B (Cryo-Carrier #CC-842)</option>
+<option>Storage Unit C (Ultra-Low Lab #03)</option>
+<option>Storage Unit D (Stationary Vault #04)</option>
+</select>
+</div>
+<!-- Timeframe Dropdown -->
+<div class="flex items-center gap-1.5 bg-surface border border-outline-variant rounded-lg px-2.5 py-1.5 text-body-sm font-body-sm text-on-surface">
+<span class="text-outline text-label-sm font-label-sm">Time:</span>
+<select class="bg-transparent border-none p-0 pr-4 text-body-sm font-headline-sm text-on-surface focus:ring-0 cursor-pointer">
+<option>Last 24 Hours</option>
+<option>Last 6 Hours</option>
+<option>Last 7 Days</option>
+<option>Custom Range</option>
+</select>
+</div>
+<button class="p-1.5 text-outline hover:text-on-surface rounded-lg hover:bg-surface-container transition-colors" title="Clear Filters">
+<span class="material-symbols-outlined text-xl" data-icon="refresh">refresh</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Main High-Fidelity Alerts Table -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant text-label-md font-label-md text-outline">
+<th class="py-3 px-4 uppercase font-semibold">Severity / Status</th>
+<th class="py-3 px-4 uppercase font-semibold">Incident ID &amp; Title</th>
+<th class="py-3 px-4 uppercase font-semibold">Storage Unit &amp; Location</th>
+<th class="py-3 px-4 uppercase font-semibold text-right">Telemetry at Event</th>
+<th class="py-3 px-4 uppercase font-semibold">Timestamp</th>
+<th class="py-3 px-4 uppercase font-semibold">Assigned Operator / Status</th>
+<th class="py-3 px-4 uppercase font-semibold text-right">Quick Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant font-body-sm text-on-surface">
+<!-- Row 1: Active Warning (Unit B) -->
+<tr class="bg-amber-50/40 hover:bg-amber-50/70 transition-colors">
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-label-sm font-label-sm font-bold bg-amber-100 text-amber-900 border border-amber-300">
+<span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+<span>WARNING</span>
+</span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-headline-sm text-body-sm text-on-surface flex items-center gap-1.5">
+<span class="font-mono text-primary font-medium">ALT-2024-089:</span>
+<span>Approaching +8.0°C Upper Bound</span>
+</div>
+<p class="text-label-sm font-label-sm text-outline mt-0.5">Rate threshold breach (+0.4°C/10m sustained)</p>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<div class="font-medium text-on-surface">Storage Unit B</div>
+<div class="text-label-sm font-label-sm text-outline">Portable Cryo-Carrier #CC-842 [Transit Van 02]</div>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap text-right font-mono font-bold text-amber-700">
+<span class="text-sm">+7.6°C</span>
+<span class="text-xs text-outline font-normal block">(+0.4°C/10m rate)</span>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<div class="font-medium text-on-surface">2 mins ago</div>
+<div class="text-label-sm font-label-sm text-outline font-mono">14:28:12 UTC</div>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm font-label-sm">
+<span class="material-symbols-outlined text-sm" data-icon="person">person</span>
+<span>Triage Dispatched to Logistics</span>
+</span>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap text-right space-x-1">
+<button class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high rounded text-label-sm font-label-sm text-primary transition-colors">Detail</button>
+<button class="px-2.5 py-1 bg-primary text-on-primary hover:bg-primary-container rounded text-label-sm font-label-sm transition-colors">Acknowledge</button>
+</td>
+</tr>
+<!-- Row 2: Resolved Anomaly (Lid Seal) -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-label-sm font-label-sm font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+<span>RESOLVED</span>
+</span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-headline-sm text-body-sm text-on-surface flex items-center gap-1.5">
+<span class="font-mono text-outline font-medium">ALT-2024-088:</span>
+<span>Lid Seal Micro-Vibration &amp; Micro-Leak</span>
+</div>
+<p class="text-label-sm font-label-sm text-outline mt-0.5">Ultrasonic sensor detected ambient vacuum drop</p>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<div class="font-medium text-on-surface">Storage Unit B</div>
+<div class="text-label-sm font-label-sm text-outline">Portable Cryo-Carrier #CC-842 [Transit Van 02]</div>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap text-right font-mono font-medium text-on-surface">
+<span class="text-sm">+4.9°C</span>
+<span class="text-xs text-outline font-normal block">(Within target band)</span>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<div class="text-on-surface">18 mins ago</div>
+<div class="text-label-sm font-label-sm text-outline font-mono">14:12:05 UTC</div>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-low text-tertiary font-label-sm font-label-sm">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+<span>Manual Clamp Inspection Verified</span>
+</span>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap text-right">
+<button class="px-2.5 py-1 bg-surface-container-low hover:bg-surface-container rounded text-label-sm font-label-sm text-on-surface-variant transition-colors">View Log</button>
+</td>
+</tr>
+<!-- Row 3: Auto-Cleared Routine Cycle -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-label-sm font-label-sm font-medium bg-blue-50 text-blue-800 border border-blue-200">
+<span class="material-symbols-outlined text-xs" data-icon="info">info</span>
+<span>INFO LOG</span>
+</span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-headline-sm text-body-sm text-on-surface flex items-center gap-1.5">
+<span class="font-mono text-outline font-medium">ALT-2024-084:</span>
+<span>Auto-Defrost Thermal Cycle Completed</span>
+</div>
+<p class="text-label-sm font-label-sm text-outline mt-0.5">Nominal defrost spike mitigated by dual Peltier bank</p>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<div class="font-medium text-on-surface">Storage Unit A</div>
+<div class="text-label-sm font-label-sm text-outline">Central Bio-Freezer #01 [Room 101]</div>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap text-right font-mono font-medium text-on-surface">
+<span class="text-sm">+3.8°C</span>
+<span class="text-xs text-outline font-normal block">(Nominal safe)</span>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<div class="text-on-surface">1h 12m ago</div>
+<div class="text-label-sm font-label-sm text-outline font-mono">13:18:40 UTC</div>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-low text-outline font-label-sm font-label-sm">
+<span class="material-symbols-outlined text-sm" data-icon="smart_toy">smart_toy</span>
+<span>Auto-Logged / Cleared</span>
+</span>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap text-right">
+<button class="px-2.5 py-1 bg-surface-container-low hover:bg-surface-container rounded text-label-sm font-label-sm text-on-surface-variant transition-colors">View Log</button>
+</td>
+</tr>
+<!-- Row 4: Door Ajar Transient Event -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-label-sm font-label-sm font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+<span>RESOLVED</span>
+</span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-headline-sm text-body-sm text-on-surface flex items-center gap-1.5">
+<span class="font-mono text-outline font-medium">ALT-2024-081:</span>
+<span>Door Ajar Recovery (Access Event #14)</span>
+</div>
+<p class="text-label-sm font-label-sm text-outline mt-0.5">Access duration 48s (WHO max 60s); chamber re-chilled</p>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<div class="font-medium text-on-surface">Storage Unit C</div>
+<div class="text-label-sm font-label-sm text-outline">Ultra-Low Lab #03 [Bio-Repository]</div>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap text-right font-mono font-medium text-on-surface">
+<span class="text-sm">-78.4°C</span>
+<span class="text-xs text-outline font-normal block">(Recovery: 3.2m)</span>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<div class="text-on-surface">3h 40m ago</div>
+<div class="text-label-sm font-label-sm text-outline font-mono">10:50:22 UTC</div>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-low text-tertiary font-label-sm font-label-sm">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+<span>Operator Badge #8410 Validated</span>
+</span>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap text-right">
+<button class="px-2.5 py-1 bg-surface-container-low hover:bg-surface-container rounded text-label-sm font-label-sm text-on-surface-variant transition-colors">View Log</button>
+</td>
+</tr>
+<!-- Row 5: Battery Switchover Info -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-label-sm font-label-sm font-medium bg-blue-50 text-blue-800 border border-blue-200">
+<span class="material-symbols-outlined text-xs" data-icon="battery_charging_full">battery_charging_full</span>
+<span>SYSTEM</span>
+</span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-headline-sm text-body-sm text-on-surface flex items-center gap-1.5">
+<span class="font-mono text-outline font-medium">ALT-2024-079:</span>
+<span>Power Inverter Grid-to-Battery Switchover</span>
+</div>
+<p class="text-label-sm font-label-sm text-outline mt-0.5">Micro-interruption during routine building load test</p>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<div class="font-medium text-on-surface">Storage Unit D</div>
+<div class="text-label-sm font-label-sm text-outline">Stationary Vault #04 [Depot B]</div>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap text-right font-mono font-medium text-on-surface">
+<span class="text-sm">+4.1°C</span>
+<span class="text-xs text-outline font-normal block">(98% Reserve Cap)</span>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<div class="text-on-surface">5h 15m ago</div>
+<div class="text-label-sm font-label-sm text-outline font-mono">09:15:00 UTC</div>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-low text-outline font-label-sm font-label-sm">
+<span class="material-symbols-outlined text-sm" data-icon="electrical_services">electrical_services</span>
+<span>UPS Auto-Engagement</span>
+</span>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap text-right">
+<button class="px-2.5 py-1 bg-surface-container-low hover:bg-surface-container rounded text-label-sm font-label-sm text-on-surface-variant transition-colors">View Log</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer Pagination / Diagnostics Bar -->
+<div class="bg-surface-container-low px-4 py-3 border-t border-outline-variant flex items-center justify-between text-label-sm font-label-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span>Showing 5 of 8 simulated events</span>
+<span class="text-outline">•</span>
+<span class="font-mono text-xs">MOCK TELEMETRY FEED ACTIVE (SAMPLE_RATE: 1.0Hz)</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest border border-outline-variant disabled:opacity-50 text-outline cursor-not-allowed">Previous</button>
+<span class="px-2 font-mono">Page 1 of 2</span>
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest border border-outline-variant hover:bg-surface-container text-on-surface transition-colors">Next</button>
+</div>
+</div>
+</div>
+<!-- Secondary Diagnostics Bento Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 pb-8">
+<!-- Mini Card 1: Excursion Risk Model -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Predictive Risk Matrix</h4>
+<span class="text-label-sm font-label-sm text-primary font-mono">LSTM_v2.1</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Continuous mathematical projection of cold-chain thermal decay under variable exterior ambient temperatures (+26°C exterior).</p>
+<div class="p-3 bg-surface-container-low rounded-lg border border-outline-variant space-y-2">
+<div class="flex justify-between text-label-sm font-label-sm">
+<span>Unit B Risk Probability</span>
+<span class="font-bold text-amber-700">78.4% (Elevated)</span>
+</div>
+<div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+<div class="bg-amber-500 h-full" style="width: 78.4%"></div>
+</div>
+<div class="flex justify-between text-label-sm font-label-sm text-outline">
+<span>Mean Buffer Remaining:</span>
+<span class="font-mono font-medium text-on-surface">0.4°C Delta</span>
+</div>
+</div>
+</div>
+<!-- Mini Card 2: Regulatory Compliance Status -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Audit &amp; WHO Compliance</h4>
+<span class="text-label-sm font-label-sm text-tertiary font-mono">WHO-PQS-E003</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Validated against Good Distribution Practice (GDP) and FDA 21 CFR Part 11 electronic records fidelity standards.</p>
+<div class="space-y-1.5 text-label-sm font-label-sm">
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low">
+<span class="text-on-surface">Tamper-Proof Audit Signatures</span>
+<span class="text-tertiary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+<span>ENFORCED</span>
+</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low">
+<span class="text-on-surface">Continuous Sensor Heartbeat</span>
+<span class="text-tertiary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+<span>SYNCED</span>
+</span>
+</div>
+</div>
+</div>
+<!-- Mini Card 3: Automated Dispatch Rule Engine -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Triage Automation Status</h4>
+<span class="text-label-sm font-label-sm text-outline font-mono">ACTIVE_RUNNER</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Escalation pathways are currently routing to primary emergency carrier fleets and local biomedical depot operators.</p>
+<div class="flex items-center gap-2 pt-1">
+<button class="flex-1 py-1.5 px-3 rounded-lg bg-surface-container-low border border-outline-variant hover:bg-surface-container text-primary font-headline-sm text-body-sm transition-colors flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-base" data-icon="tune">tune</span>
+<span>Configure Rules</span>
+</button>
+<button class="py-1.5 px-3 rounded-lg bg-surface-container-low border border-outline-variant hover:bg-surface-container text-outline hover:text-on-surface transition-colors" title="Test Webhook Dispatch">
+<span class="material-symbols-outlined text-base" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

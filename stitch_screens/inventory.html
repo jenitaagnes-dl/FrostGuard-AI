@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FrostGuard AI — Storage Units Inventory</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-tint": "#006398",
+            "tertiary-container": "#00855b",
+            "surface-container-highest": "#d3e4fe",
+            "secondary-container": "#dae2fd",
+            "on-background": "#0b1c30",
+            "surface-variant": "#d3e4fe",
+            "inverse-on-surface": "#eaf1ff",
+            "on-tertiary-fixed-variant": "#005236",
+            "primary-container": "#007bb9",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6",
+            "outline": "#707881",
+            "outline-variant": "#bfc7d2",
+            "surface-container-high": "#dce9ff",
+            "secondary-fixed-dim": "#bec6e0",
+            "primary-fixed": "#cce5ff",
+            "on-secondary-fixed-variant": "#3f465c",
+            "surface": "#f8f9ff",
+            "primary-fixed-dim": "#93ccff",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#4edea3",
+            "error": "#ba1a1a",
+            "surface-container": "#e5eeff",
+            "on-primary-container": "#fdfcff",
+            "on-tertiary-fixed": "#002113",
+            "on-primary-fixed": "#001d31",
+            "primary": "#006194",
+            "secondary-fixed": "#dae2fd",
+            "tertiary": "#006947",
+            "inverse-primary": "#93ccff",
+            "on-secondary-container": "#5c647a",
+            "background": "#f8f9ff",
+            "tertiary-fixed": "#6ffbbe",
+            "surface-container-low": "#eff4ff",
+            "secondary": "#565e74",
+            "on-secondary": "#ffffff",
+            "surface-dim": "#cbdbf5",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "inverse-surface": "#213145",
+            "surface-bright": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-surface": "#0b1c30",
+            "on-surface-variant": "#3f4850",
+            "on-tertiary-container": "#f5fff6",
+            "on-primary-fixed-variant": "#004b73",
+            "on-secondary-fixed": "#131b2e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "space-xl": "2rem",
+            "space-xs": "0.25rem",
+            "space-2xl": "3rem",
+            "gutter-mobile": "0.75rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.5rem",
+            "margin-mobile": "1rem",
+            "gutter": "1.5rem",
+            "margin": "2rem"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Inter"],
+            "headline-sm": ["Inter"],
+            "label-lg": ["JetBrains Mono"],
+            "telemetry-metric": ["JetBrains Mono"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "display-lg": ["Inter"],
+            "label-md": ["JetBrains Mono"],
+            "label-sm": ["JetBrains Mono"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-md": ["Inter"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "telemetry-metric": ["32px", { "lineHeight": "36px", "letterSpacing": "-0.03em", "fontWeight": "700" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0em", "fontWeight": "500" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed min-h-screen flex flex-col">
+<!-- ==================== FIXED LEFT SIDEBAR (Shared Component) ==================== -->
+<aside class="fixed top-0 left-0 h-full w-72 flex flex-col justify-between p-4 z-40 bg-surface-container-lowest dark:bg-inverse-surface border-r border-outline-variant dark:border-outline shadow-sm dark:shadow-none">
+<div class="space-y-6">
+<!-- Header / Logo -->
+<div class="flex items-center gap-3 px-2 pt-1">
+<img alt="FrostGuard AI Cold Chain Shield Logo" class="w-10 h-10 rounded-lg object-contain bg-surface-container-low p-1 border border-outline-variant" src="https://lh3.googleusercontent.com/aida/AEtjO1VxyxXCL95Bzvwc4loDZuE_IleldGeBciB2Dd7QGSevEC73CCAUROYvNVwuIXLaga3wtk0cEM_NxXdL-8vorkizHs6adAwdy-KRu4Gum6IylpzCGN0Kn2UMthpt662a69jDf3iPXrBVF22-jUttEa8C1IcdyZpWbDjPQN3o7wi9GwAz4ha3Gl5cJqHM8l-Z-pPvCbhxTw9DIiRWDGR04rdDEqEJhD09Og-Dl7XYCMsaZFzVaKwBAAV0pYM"/>
+<div>
+<div class="font-headline-sm text-headline-sm text-primary dark:text-inverse-primary tracking-tight">FrostGuard AI</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant font-medium">Cold-Chain Telemetry MVP</div>
+</div>
+</div>
+<!-- Navigation Menu Tabs -->
+<nav class="space-y-1">
+<!-- 1. Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-outline">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- 2. Live Monitoring -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-outline">sensors</span>
+<span>Live Monitoring</span>
+</a>
+<!-- 3. Predictions -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-outline">psychology</span>
+<span>Predictions</span>
+</a>
+<!-- 4. Alerts -->
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors duration-150 active:scale-[0.99]" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline">warning</span>
+<span>Alerts</span>
+</div>
+<span class="bg-error-container text-on-error-container font-label-sm text-label-sm px-1.5 py-0.5 rounded-full font-bold">1</span>
+</a>
+<!-- 5. Storage Units (MANDATORY ACTIVE TAB) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container dark:bg-surface-variant text-primary dark:text-inverse-primary font-headline-sm active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-primary dark:text-inverse-primary" style="font-variation-settings: 'FILL' 1;">ac_unit</span>
+<span>Storage Units</span>
+</a>
+<!-- 6. Reports -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-outline">assessment</span>
+<span>Reports</span>
+</a>
+<!-- 7. Settings -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface font-body-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-outline">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Sidebar Section -->
+<div class="space-y-4 pt-4 border-t border-outline-variant dark:border-outline">
+<!-- Status Badge / CTA -->
+<div class="px-3 py-2 rounded-lg bg-surface-container-low dark:bg-surface-variant/40 border border-outline-variant flex items-center gap-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Simulated Sensor Feed • Demo Mode</span>
+</div>
+<!-- Footer tab links -->
+<div class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface font-body-sm hover:bg-surface-container-low transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-outline text-lg">monitor_heart</span>
+<span>System Health</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface font-body-sm hover:bg-surface-container-low transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-outline text-lg">help</span>
+<span>Documentation</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- ==================== TOP NAVIGATION BAR (Shared Component) ==================== -->
+<header class="fixed top-0 right-0 left-72 h-16 px-6 flex items-center justify-between z-30 bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none">
+<!-- Left: Search Bar -->
+<div class="w-96 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-xl">search</span>
+<input class="w-full pl-10 pr-4 py-2 text-sm bg-surface rounded-lg border border-outline-variant text-on-surface placeholder:text-outline focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 font-body-md transition-all duration-150" placeholder="Search units by ID, model, location, or payload..." type="text"/>
+</div>
+<!-- Right: Status, Actions, Profile -->
+<div class="flex items-center gap-4">
+<!-- Live Indicator Action Badge -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-low border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-tertiary font-semibold tracking-wide">Demo Feed: Live (1s)</span>
+</div>
+<!-- Trailing Icon Actions -->
+<button aria-label="Schedule Telemetry Run" class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined">schedule</span>
+</button>
+<button aria-label="Notifications" class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error ring-2 ring-surface-container-lowest"></span>
+</button>
+<div class="h-6 w-px bg-outline-variant"></div>
+<!-- User Profile -->
+<div class="flex items-center gap-3 pl-1 cursor-pointer">
+<div class="w-9 h-9 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-headline-sm text-headline-sm border border-outline-variant font-bold shadow-sm">
+          OP
+        </div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface">MVP Demo Operator</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Cold Chain Supervisor</span>
+</div>
+</div>
+</div>
+</header>
+<!-- ==================== MAIN CONTENT AREA ==================== -->
+<main class="ml-72 mt-16 p-8 flex-1 space-y-6">
+<!-- Prototype Academic Disclaimer Banner -->
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-3 px-4 flex items-center justify-between shadow-xs">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-xl">info</span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">
+<strong class="font-semibold text-primary">SIMULATED DEMO ENVIRONMENT</strong> • Academic Prototype: Monitored storage units and simulated inventory. Not clinical hardware.
+        </span>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant font-mono">
+        Active Telemetry Session: 0x88F-LIVE
+      </div>
+</div>
+<!-- Page Header & Action Controls -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-background tracking-tight">Monitored Storage Units Inventory</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Multi-chamber inventory management, cold-box asset tracking, and thermal envelope integrity</p>
+</div>
+<!-- Header actions cluster -->
+<div class="flex items-center gap-2.5 flex-wrap">
+<button class="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-low text-sm font-medium transition-colors shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-lg text-outline">tune</span>
+<span class="font-headline-sm text-body-sm">Batch Calibration Check</span>
+</button>
+<button class="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-low text-sm font-medium transition-colors shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-lg text-outline">file_download</span>
+<span class="font-headline-sm text-body-sm">Export Units Manifest</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-on-primary hover:bg-primary-container text-sm font-semibold transition-all duration-150 shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-lg">add</span>
+<span class="font-headline-sm text-body-sm">Add Virtual Storage Unit</span>
+</button>
+</div>
+</div>
+<!-- KPI Overview Cards (4 Modules Across) -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+<!-- KPI 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm relative overflow-hidden flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">Total Monitored Units</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">domain</span>
+</div>
+</div>
+<div class="my-2">
+<div class="font-telemetry-metric text-telemetry-metric text-on-surface">4 Active Units</div>
+<div class="flex items-center gap-1.5 mt-1 font-body-sm text-body-sm text-tertiary">
+<span class="material-symbols-outlined text-base">check_circle</span>
+<span>100% telemetry online</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full w-full"></div>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm relative overflow-hidden flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">Total Protected Doses</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">vaccines</span>
+</div>
+</div>
+<div class="my-2">
+<div class="font-telemetry-metric text-telemetry-metric text-on-surface">12,450 Vials</div>
+<div class="flex items-center gap-1 mt-1 font-body-sm text-body-sm text-on-surface-variant">
+<span>Simulated inventory value $342k</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[82%]"></div>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm relative overflow-hidden flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">Fleet Thermal Compliance</span>
+<div class="w-8 h-8 rounded-lg bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-lg">shield</span>
+</div>
+</div>
+<div class="my-2">
+<div class="font-telemetry-metric text-telemetry-metric text-on-surface">94.2%</div>
+<div class="flex items-center gap-1.5 mt-1 font-body-sm text-body-sm text-outline">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span>3 Compliant, 1 Warning Drift</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden flex">
+<div class="bg-tertiary h-full w-[75%]"></div>
+<div class="bg-error h-full w-[25%]"></div>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm relative overflow-hidden flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">Average Fleet Temperature</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">device_thermostat</span>
+</div>
+</div>
+<div class="my-2">
+<div class="font-telemetry-metric text-telemetry-metric text-on-surface">+4.5°C</div>
+<div class="flex items-center gap-1 mt-1 font-body-sm text-body-sm text-tertiary">
+<span>Ideal midpoint: +5.0°C in +2°C to +8°C envelope</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full w-[56%]"></div>
+</div>
+</div>
+</div>
+<!-- Filter, Search & View Controls Bar -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-3 px-4 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-4">
+<!-- Filter Tabs -->
+<div class="flex items-center gap-1 overflow-x-auto w-full lg:w-auto pb-1 lg:pb-0">
+<button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-medium whitespace-nowrap shadow-xs">
+          All Units (4)
+        </button>
+<button class="px-3 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low font-label-md text-label-md font-medium whitespace-nowrap transition-colors">
+          Compliant Safe (3)
+        </button>
+<button class="px-3 py-1.5 rounded-lg text-error hover:bg-error-container/30 font-label-md text-label-md font-medium whitespace-nowrap transition-colors flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+          Attention Required (1)
+        </button>
+<button class="px-3 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low font-label-md text-label-md font-medium whitespace-nowrap transition-colors">
+          Ultra-Cold / Cryo (1)
+        </button>
+<button class="px-3 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low font-label-md text-label-md font-medium whitespace-nowrap transition-colors">
+          Refrigerated 2-8°C (3)
+        </button>
+</div>
+<!-- Search, Sort & View Toggles -->
+<div class="flex items-center gap-3 w-full lg:w-auto justify-end">
+<!-- Search field inside filter -->
+<div class="relative w-48">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+<input class="w-full pl-8 pr-3 py-1.5 text-xs bg-surface rounded-lg border border-outline-variant text-on-surface placeholder:text-outline focus:outline-none focus:border-primary" placeholder="Filter units..." type="text"/>
+</div>
+<!-- Sort Dropdown -->
+<div class="flex items-center">
+<select class="py-1.5 pl-3 pr-8 text-xs font-label-md bg-surface-container-low border border-outline-variant rounded-lg text-on-surface font-medium focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer">
+<option>Sort by: Risk Level</option>
+<option>Temperature: High to Low</option>
+<option>Dose Volume</option>
+</select>
+</div>
+<!-- View Mode Switcher -->
+<div class="flex items-center bg-surface-container-low border border-outline-variant rounded-lg p-0.5">
+<button class="p-1 rounded-md bg-surface-container-lowest text-primary shadow-xs" title="Grid View">
+<span class="material-symbols-outlined text-lg">grid_view</span>
+</button>
+<button class="p-1 rounded-md text-on-surface-variant hover:text-on-surface transition-colors" title="Table View">
+<span class="material-symbols-outlined text-lg">table_rows</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Storage Units Grid (4 Comprehensive Units) -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+<!-- ==================== UNIT 1 ==================== -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm hover:border-primary/50 transition-all flex flex-col justify-between space-y-5">
+<!-- Unit Header -->
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low border border-outline-variant flex items-center justify-center text-primary mt-0.5 shadow-xs">
+<span class="material-symbols-outlined text-2xl">kitchen</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm font-mono px-2 py-0.5 rounded bg-surface-container text-on-surface font-semibold">FG-REF-101</span>
+<span class="text-xs font-body-sm text-on-surface-variant">• Undercounter Bio-Pharma Refrigerator</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mt-1 font-semibold">Storage Unit A — Primary Clinical Refrigerator</h2>
+<div class="flex items-center gap-1.5 text-xs font-body-sm text-on-surface-variant mt-0.5">
+<span class="material-symbols-outlined text-sm text-outline">location_on</span>
+<span>Main Hospital Cold Lab 101 • Grid Bay 3</span>
+</div>
+</div>
+</div>
+<!-- Safe Status Badge -->
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-tertiary border border-emerald-200 shadow-2xs">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">SAFE</span>
+</div>
+</div>
+<!-- Telemetry Core & Micro Gauge -->
+<div class="bg-surface-container-low border border-outline-variant/60 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+<div>
+<div class="text-xs font-label-sm text-on-surface-variant uppercase font-medium">Core Chamber Temperature</div>
+<div class="flex items-baseline gap-2 mt-0.5">
+<span class="font-telemetry-metric text-display-lg text-tertiary font-bold tracking-tight">+4.2°C</span>
+<span class="text-xs font-body-sm text-on-surface-variant">(Target: +2.0°C to +8.0°C)</span>
+</div>
+<div class="text-xs font-label-sm text-tertiary flex items-center gap-1 mt-1 font-mono">
+<span class="material-symbols-outlined text-sm">trending_flat</span> Steady thermal gradient (σ=0.08°C)
+            </div>
+</div>
+<!-- Micro range visualization -->
+<div class="w-full md:w-56 space-y-1">
+<div class="flex justify-between text-[10px] font-mono text-on-surface-variant">
+<span>+2.0°C Min</span>
+<span class="text-tertiary font-semibold">Current +4.2°C</span>
+<span>+8.0°C Max</span>
+</div>
+<div class="h-2.5 w-full bg-surface-container rounded-full relative overflow-hidden flex border border-outline-variant/40">
+<div class="h-full bg-tertiary/20 w-1/4"></div>
+<div class="h-full bg-tertiary w-1/2 relative">
+<!-- Marker -->
+<div class="absolute top-0 bottom-0 left-[36%] w-1 bg-tertiary shadow-sm"></div>
+</div>
+<div class="h-full bg-tertiary/20 w-1/4"></div>
+</div>
+<div class="text-right text-[10px] font-mono text-tertiary">Within safe threshold bounds</div>
+</div>
+</div>
+<!-- Payload & Sensor Health Breakdown -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+<div class="bg-surface-container-lowest border border-outline-variant p-3 rounded-lg space-y-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1.5 uppercase font-medium">
+<span class="material-symbols-outlined text-sm text-primary">medication</span>
+<span>Active Payload</span>
+</div>
+<div class="font-body-md font-semibold text-on-surface">4,200 Doses (mRNA-1273 &amp; BNT162b2)</div>
+<div class="text-on-surface-variant text-[11px]">Cold capacity: 70% utilized • Tray 1-4</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-3 rounded-lg space-y-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1.5 uppercase font-medium">
+<span class="material-symbols-outlined text-sm text-primary">tune</span>
+<span>Diagnostics &amp; Hardware</span>
+</div>
+<div class="font-body-sm text-on-surface">Humidity: 48% RH • Door Seal: Intact</div>
+<div class="text-tertiary font-medium text-[11px] flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">power</span> Mains Online (Battery 98%)
+            </div>
+</div>
+</div>
+<!-- Unit Footer & Actions -->
+<div class="pt-3 border-t border-outline-variant flex items-center justify-between text-xs font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-tertiary">verified</span>
+<span>Last Calibrated: 2024-03-15 • NIST Calibrated</span>
+</div>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-outline-variant hover:bg-surface-container-low text-primary font-headline-sm font-semibold transition-all">
+<span>View Detailed Telemetry</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- ==================== UNIT 2 (ATTENTION REQUIRED) ==================== -->
+<div class="bg-surface-container-lowest border-2 border-amber-300 rounded-xl p-6 shadow-sm hover:border-amber-400 transition-all flex flex-col justify-between space-y-5 relative">
+<!-- Warning Top Indicator Strip -->
+<div class="absolute -top-3 left-6 px-3 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-amber-700">warning</span>
+<span>ACTION REQUIRED: ACTIVE DRIFT</span>
+</div>
+<!-- Unit Header -->
+<div class="flex items-start justify-between gap-4 pt-1">
+<div class="flex items-start gap-3.5">
+<div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 mt-0.5 shadow-xs">
+<span class="material-symbols-outlined text-2xl">local_shipping</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm font-mono px-2 py-0.5 rounded bg-surface-container text-on-surface font-semibold">FG-MOB-842</span>
+<span class="text-xs font-body-sm text-on-surface-variant">• Active Vacuum Insulated Mobile Transporter</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mt-1 font-semibold">Storage Unit B — Portable Cryo-Carrier #CC-842</h2>
+<div class="flex items-center gap-1.5 text-xs font-body-sm text-on-surface-variant mt-0.5">
+<span class="material-symbols-outlined text-sm text-outline">navigation</span>
+<span>Mobile Transit Van #02 • Highway Leg 4 (In Transit)</span>
+</div>
+</div>
+</div>
+<!-- Warning Status Badge -->
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-300 shadow-2xs">
+<span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+<span class="font-label-sm text-label-sm font-bold tracking-wider">WARNING: THERMAL DRIFT</span>
+</div>
+</div>
+<!-- Telemetry Core & Alert Gauge -->
+<div class="bg-amber-50/70 border border-amber-200 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+<div>
+<div class="text-xs font-label-sm text-amber-900 uppercase font-medium">Core Chamber Temperature</div>
+<div class="flex items-baseline gap-2 mt-0.5">
+<span class="font-telemetry-metric text-display-lg text-amber-700 font-bold tracking-tight">+7.6°C</span>
+<span class="text-xs font-body-sm text-amber-800 font-semibold">(Threshold: +8.0°C Excursion Limit)</span>
+</div>
+<div class="text-xs font-label-sm text-amber-900 flex items-center gap-1 mt-1 font-mono font-medium">
+<span class="material-symbols-outlined text-sm text-amber-700">trending_up</span>
+<span>Drift Rate: +0.07°C/min • Projected Breach: 42 mins</span>
+</div>
+</div>
+<!-- Alert range visualization -->
+<div class="w-full md:w-56 space-y-1">
+<div class="flex justify-between text-[10px] font-mono text-amber-900">
+<span>+2.0°C</span>
+<span class="text-amber-800 font-bold">Critical +7.6°C</span>
+<span class="text-error font-bold">+8.0°C Breach</span>
+</div>
+<div class="h-2.5 w-full bg-amber-200/50 rounded-full relative overflow-hidden flex border border-amber-300">
+<div class="h-full bg-emerald-400 w-3/5"></div>
+<div class="h-full bg-amber-500 w-1/4 relative">
+<!-- Marker -->
+<div class="absolute top-0 bottom-0 right-1 w-1 bg-error shadow-sm"></div>
+</div>
+<div class="h-full bg-red-400 w-[15%]"></div>
+</div>
+<div class="text-right text-[10px] font-mono text-error font-semibold">Excursion risk: HIGH</div>
+</div>
+</div>
+<!-- Payload & Sensor Health Breakdown -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+<div class="bg-surface-container-lowest border border-outline-variant p-3 rounded-lg space-y-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1.5 uppercase font-medium">
+<span class="material-symbols-outlined text-sm text-amber-700">vaccines</span>
+<span>At-Risk Payload</span>
+</div>
+<div class="font-body-md font-semibold text-on-surface">1,850 Doses (Viral Vector COVID-19)</div>
+<div class="text-error text-[11px] font-medium">Cumulative excursion reserve: 58 mins remain</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-3 rounded-lg space-y-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1.5 uppercase font-medium">
+<span class="material-symbols-outlined text-sm text-outline">sensors_off</span>
+<span>Telemetry Anomaly Flags</span>
+</div>
+<div class="font-body-sm text-on-surface font-medium text-amber-900">Humidity: 64% RH (Elevated) • Seal: Vibration Alert</div>
+<div class="text-on-surface-variant text-[11px] flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-amber-700">battery_alert</span> Battery Backup: 84% Nominal
+            </div>
+</div>
+</div>
+<!-- Unit Footer & Actions -->
+<div class="pt-3 border-t border-outline-variant flex items-center justify-between text-xs font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-1.5 text-amber-800 font-medium">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>Live Telemetry Ping: 1s ago (Van Gateway #02)</span>
+</div>
+<button class="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-headline-sm font-semibold transition-all shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-base">psychology</span>
+<span>Inspect Drift Diagnostics</span>
+</button>
+</div>
+</div>
+<!-- ==================== UNIT 3 ==================== -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm hover:border-primary/50 transition-all flex flex-col justify-between space-y-5">
+<!-- Unit Header -->
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low border border-outline-variant flex items-center justify-center text-primary mt-0.5 shadow-xs">
+<span class="material-symbols-outlined text-2xl">warehouse</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm font-mono px-2 py-0.5 rounded bg-surface-container text-on-surface font-semibold">FG-VAULT-04</span>
+<span class="text-xs font-body-sm text-on-surface-variant">• Walk-In High-Capacity Cold Room</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mt-1 font-semibold">Storage Unit C — Deep Reserve Cold Vault</h2>
+<div class="flex items-center gap-1.5 text-xs font-body-sm text-on-surface-variant mt-0.5">
+<span class="material-symbols-outlined text-sm text-outline">location_on</span>
+<span>Central Regional Repository • Bay B</span>
+</div>
+</div>
+</div>
+<!-- Safe Status Badge -->
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-tertiary border border-emerald-200 shadow-2xs">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">SAFE</span>
+</div>
+</div>
+<!-- Telemetry Core & Micro Gauge -->
+<div class="bg-surface-container-low border border-outline-variant/60 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+<div>
+<div class="text-xs font-label-sm text-on-surface-variant uppercase font-medium">Core Chamber Temperature</div>
+<div class="flex items-baseline gap-2 mt-0.5">
+<span class="font-telemetry-metric text-display-lg text-tertiary font-bold tracking-tight">+3.8°C</span>
+<span class="text-xs font-body-sm text-on-surface-variant">(Target: +2.0°C to +8.0°C)</span>
+</div>
+<div class="text-xs font-label-sm text-tertiary flex items-center gap-1 mt-1 font-mono">
+<span class="material-symbols-outlined text-sm">format_image_left</span> Ultra-stable envelope (σ=0.04°C)
+            </div>
+</div>
+<!-- Micro range visualization -->
+<div class="w-full md:w-56 space-y-1">
+<div class="flex justify-between text-[10px] font-mono text-on-surface-variant">
+<span>+2.0°C Min</span>
+<span class="text-tertiary font-semibold">Current +3.8°C</span>
+<span>+8.0°C Max</span>
+</div>
+<div class="h-2.5 w-full bg-surface-container rounded-full relative overflow-hidden flex border border-outline-variant/40">
+<div class="h-full bg-tertiary/20 w-1/4"></div>
+<div class="h-full bg-tertiary w-1/2 relative">
+<!-- Marker -->
+<div class="absolute top-0 bottom-0 left-[30%] w-1 bg-tertiary shadow-sm"></div>
+</div>
+<div class="h-full bg-tertiary/20 w-1/4"></div>
+</div>
+<div class="text-right text-[10px] font-mono text-tertiary">Industrial Dual-Chiller Redundant</div>
+</div>
+</div>
+<!-- Payload & Sensor Health Breakdown -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+<div class="bg-surface-container-lowest border border-outline-variant p-3 rounded-lg space-y-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1.5 uppercase font-medium">
+<span class="material-symbols-outlined text-sm text-primary">inventory_2</span>
+<span>Active Payload</span>
+</div>
+<div class="font-body-md font-semibold text-on-surface">3,900 Doses (Pediatric Multi-Dose Vials)</div>
+<div class="text-on-surface-variant text-[11px]">Strategic reserve lots: #PED-881 to #PED-894</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-3 rounded-lg space-y-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1.5 uppercase font-medium">
+<span class="material-symbols-outlined text-sm text-primary">security</span>
+<span>Vault Subsystems</span>
+</div>
+<div class="font-body-sm text-on-surface">Humidity: 45% RH • Door: Hermetic Active</div>
+<div class="text-tertiary font-medium text-[11px] flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">bolt</span> Dual Mains Supply 100% (Generator Standby)
+            </div>
+</div>
+</div>
+<!-- Unit Footer & Actions -->
+<div class="pt-3 border-t border-outline-variant flex items-center justify-between text-xs font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-tertiary">verified</span>
+<span>Last Calibrated: 2024-02-10 • ISO 17025 Certified</span>
+</div>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-outline-variant hover:bg-surface-container-low text-primary font-headline-sm font-semibold transition-all">
+<span>View Detailed Telemetry</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- ==================== UNIT 4 ==================== -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm hover:border-primary/50 transition-all flex flex-col justify-between space-y-5">
+<!-- Unit Header -->
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low border border-outline-variant flex items-center justify-center text-primary mt-0.5 shadow-xs">
+<span class="material-symbols-outlined text-2xl">local_pharmacy</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm font-mono px-2 py-0.5 rounded bg-surface-container text-on-surface font-semibold">FG-DISP-08</span>
+<span class="text-xs font-body-sm text-on-surface-variant">• Pass-Through Pharmacy Dispensing Unit</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mt-1 font-semibold">Storage Unit D — Outpatient Dispensing Refrigerator</h2>
+<div class="flex items-center gap-1.5 text-xs font-body-sm text-on-surface-variant mt-0.5">
+<span class="material-symbols-outlined text-sm text-outline">location_on</span>
+<span>Clinic Ward Dispensing #4</span>
+</div>
+</div>
+</div>
+<!-- Safe Status Badge -->
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-tertiary border border-emerald-200 shadow-2xs">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">SAFE</span>
+</div>
+</div>
+<!-- Telemetry Core & Micro Gauge -->
+<div class="bg-surface-container-low border border-outline-variant/60 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+<div>
+<div class="text-xs font-label-sm text-on-surface-variant uppercase font-medium">Core Chamber Temperature</div>
+<div class="flex items-baseline gap-2 mt-0.5">
+<span class="font-telemetry-metric text-display-lg text-tertiary font-bold tracking-tight">+4.9°C</span>
+<span class="text-xs font-body-sm text-on-surface-variant">(Target: +2.0°C to +8.0°C)</span>
+</div>
+<div class="text-xs font-label-sm text-tertiary flex items-center gap-1 mt-1 font-mono">
+<span class="material-symbols-outlined text-sm">swap_vert</span> Rapid recovery post-dispense cycle
+            </div>
+</div>
+<!-- Micro range visualization -->
+<div class="w-full md:w-56 space-y-1">
+<div class="flex justify-between text-[10px] font-mono text-on-surface-variant">
+<span>+2.0°C Min</span>
+<span class="text-tertiary font-semibold">Current +4.9°C</span>
+<span>+8.0°C Max</span>
+</div>
+<div class="h-2.5 w-full bg-surface-container rounded-full relative overflow-hidden flex border border-outline-variant/40">
+<div class="h-full bg-tertiary/20 w-1/4"></div>
+<div class="h-full bg-tertiary w-1/2 relative">
+<!-- Marker -->
+<div class="absolute top-0 bottom-0 left-[48%] w-1 bg-tertiary shadow-sm"></div>
+</div>
+<div class="h-full bg-tertiary/20 w-1/4"></div>
+</div>
+<div class="text-right text-[10px] font-mono text-tertiary">Air curtain cycle operational</div>
+</div>
+</div>
+<!-- Payload & Sensor Health Breakdown -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+<div class="bg-surface-container-lowest border border-outline-variant p-3 rounded-lg space-y-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1.5 uppercase font-medium">
+<span class="material-symbols-outlined text-sm text-primary">healing</span>
+<span>Active Payload</span>
+</div>
+<div class="font-body-md font-semibold text-on-surface">2,500 Doses (Influenza &amp; Rabies Prophylaxis)</div>
+<div class="text-on-surface-variant text-[11px]">Immediate clinical dispense carousel 01-08</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-3 rounded-lg space-y-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1.5 uppercase font-medium">
+<span class="material-symbols-outlined text-sm text-primary">sensors</span>
+<span>Environmental State</span>
+</div>
+<div class="font-body-sm text-on-surface">Humidity: 49% RH • Door: Closed (Opened 14m ago)</div>
+<div class="text-tertiary font-medium text-[11px] flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">battery_charging_full</span> Battery Standby: 91%
+            </div>
+</div>
+</div>
+<!-- Unit Footer & Actions -->
+<div class="pt-3 border-t border-outline-variant flex items-center justify-between text-xs font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-tertiary">verified</span>
+<span>Last Calibrated: 2024-01-22 • Annual Inspection Passed</span>
+</div>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-outline-variant hover:bg-surface-container-low text-primary font-headline-sm font-semibold transition-all">
+<span>View Detailed Telemetry</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Unit Maintenance & Calibration Status Strip -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">verified_user</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">NIST-Traceable Calibration &amp; Regulatory Compliance Schedule</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">CFR Title 21 Part 11 Audit Trail Enabled</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<!-- Calib 1 -->
+<div class="bg-surface-container-low/60 border border-outline-variant/60 rounded-lg p-3 flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary text-xl mt-0.5">check_circle</span>
+<div class="space-y-0.5">
+<div class="font-label-sm text-label-sm font-bold text-on-surface">FG-REF-101 (Unit A)</div>
+<div class="text-xs font-body-sm text-on-surface-variant">NIST Primary Probes A/B</div>
+<div class="text-[11px] font-mono text-tertiary font-medium">Recert Due: 2025-03-15</div>
+</div>
+</div>
+<!-- Calib 2 -->
+<div class="bg-amber-50/70 border border-amber-200 rounded-lg p-3 flex items-start gap-3">
+<span class="material-symbols-outlined text-amber-700 text-xl mt-0.5">pending_actions</span>
+<div class="space-y-0.5">
+<div class="font-label-sm text-label-sm font-bold text-amber-900">FG-MOB-842 (Unit B)</div>
+<div class="text-xs font-body-sm text-amber-800">Mobile PT100 Dual RTD</div>
+<div class="text-[11px] font-mono text-error font-medium">Inspection Flagged • Due in 12d</div>
+</div>
+</div>
+<!-- Calib 3 -->
+<div class="bg-surface-container-low/60 border border-outline-variant/60 rounded-lg p-3 flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary text-xl mt-0.5">check_circle</span>
+<div class="space-y-0.5">
+<div class="font-label-sm text-label-sm font-bold text-on-surface">FG-VAULT-04 (Unit C)</div>
+<div class="text-xs font-body-sm text-on-surface-variant">Multi-Point 8-Ch Array</div>
+<div class="text-[11px] font-mono text-tertiary font-medium">Recert Due: 2025-02-10</div>
+</div>
+</div>
+<!-- Calib 4 -->
+<div class="bg-surface-container-low/60 border border-outline-variant/60 rounded-lg p-3 flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary text-xl mt-0.5">check_circle</span>
+<div class="space-y-0.5">
+<div class="font-label-sm text-label-sm font-bold text-on-surface">FG-DISP-08 (Unit D)</div>
+<div class="text-xs font-body-sm text-on-surface-variant">Internal Glycol Buffered</div>
+<div class="text-[11px] font-mono text-tertiary font-medium">Recert Due: 2025-01-22</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
